@@ -1,0 +1,170 @@
+{
+  "version": "1.0.0",
+  "language": "sr",
+  "strings": {
+    "app": {
+      "name": "HemiLab",
+      "tagline": "Otkrij svet hemije!"
+    },
+    "age_gate": {
+      "title": "Dobrodošli u HemiLab!",
+      "question": "Koliko imaš godina?",
+      "under_13": "Imam manje od 13 godina",
+      "over_13": "Imam 13 ili više godina",
+      "confirm": "Potvrdi"
+    },
+    "parental_gate": {
+      "title": "Pitanje za roditelja",
+      "instruction": "Molimo roditelja da reši ovaj zadatak:",
+      "question_template": "Koliko je {num1} + {num2}?",
+      "submit": "Potvrdi",
+      "wrong_answer": "Netačan odgovor. Zamoli roditelja za pomoć.",
+      "placeholder": "Unesite odgovor"
+    },
+    "main_menu": {
+      "play": "Igraj",
+      "laboratory": "Laboratorija",
+      "settings": "Podešavanja",
+      "about": "O igri"
+    },
+    "chapter_select": {
+      "title": "Izaberi poglavlje",
+      "locked": "Zaključano",
+      "unlock_requirement": "Potrebno {stars} zvezdica",
+      "stars": "Zvezdice",
+      "progress": "{current}/{total} nivoa"
+    },
+    "level_select": {
+      "title": "Izaberi nivo",
+      "locked": "Zaključano",
+      "best_stars": "Najbolji rezultat",
+      "not_played": "Nije igrano"
+    },
+    "gameplay": {
+      "title": "Napravi: {molecule}",
+      "time_left": "Vreme",
+      "score": "Poeni",
+      "hint": "Pomoć",
+      "pause": "Pauza",
+      "elements_available": "Dostupni elementi",
+      "workspace": "Radna površina",
+      "submit": "Proveri",
+      "clear": "Obriši sve"
+    },
+    "hints": {
+      "title": "Pomoć",
+      "remaining": "Preostalo pomoći: {count}",
+      "use_hint": "Koristi pomoć",
+      "no_hints": "Nemaš više pomoći!",
+      "hint_used": "Pomoć iskorišćena"
+    },
+    "feedback": {
+      "correct": "Bravo! Tačno!",
+      "incorrect": "Probaj ponovo!",
+      "wrong_elements": "Nisi upotrebio prave elemente.",
+      "wrong_count": "Broj atoma nije tačan.",
+      "time_up": "Vreme je isteklo!"
+    },
+    "level_complete": {
+      "title": "Nivo završen!",
+      "molecule_discovered": "Otkrio/la si: {molecule}",
+      "stars_earned": "Zvezdice",
+      "time_bonus": "Vremenski bonus",
+      "hint_penalty": "Korišćena pomoć",
+      "total_score": "Ukupno poena",
+      "coins_earned": "Novčići",
+      "fun_fact": "Zanimljivost",
+      "next_level": "Sledeći nivo",
+      "replay": "Ponovi",
+      "back_to_menu": "Nazad na meni"
+    },
+    "laboratory": {
+      "title": "Laboratorija",
+      "periodic_table": "Periodični sistem",
+      "discovered_elements": "Otkriveni elementi",
+      "discovered_molecules": "Otkriveni molekuli",
+      "element_details": "Detalji elementa",
+      "molecule_details": "Detalji molekula",
+      "locked_element": "Ovaj element još nisi otključao!",
+      "tap_to_learn": "Dodirni za više informacija"
+    },
+    "element_details": {
+      "symbol": "Simbol",
+      "name": "Ime",
+      "atomic_number": "Atomski broj",
+      "atomic_mass": "Atomska masa",
+      "category": "Kategorija",
+      "valence": "Valentnost",
+      "fun_fact": "Zanimljivost"
+    },
+    "categories": {
+      "nonmetal": "Nemetal",
+      "alkali_metal": "Alkalni metal",
+      "alkaline_earth_metal": "Zemnoalkalni metal",
+      "transition_metal": "Prelazni metal",
+      "halogen": "Halogen",
+      "noble_gas": "Plemeniti gas"
+    },
+    "settings": {
+      "title": "Podešavanja",
+      "sound": "Zvučni efekti",
+      "music": "Muzika",
+      "script": "Pismo",
+      "script_latin": "Latinica",
+      "script_cyrillic": "Ćirilica",
+      "language": "Jezik",
+      "reset_progress": "Obriši napredak",
+      "reset_confirm": "Da li si siguran/na? Sav napredak će biti izgubljen!",
+      "reset_yes": "Da, obriši",
+      "reset_no": "Ne, otkaži",
+      "version": "Verzija"
+    },
+    "pause_menu": {
+      "title": "Pauza",
+      "resume": "Nastavi",
+      "restart": "Ponovi nivo",
+      "settings": "Podešavanja",
+      "quit": "Izađi"
+    },
+    "tutorial": {
+      "welcome": "Dobrodošli u HemiLab!",
+      "drag_elements": "Prevuci elemente na radnu površinu",
+      "combine_atoms": "Spoji atome da napraviš molekul",
+      "check_answer": "Pritisni 'Proveri' kada završiš",
+      "use_hints": "Ako se zaglaviš, koristi 'Pomoć'",
+      "earn_stars": "Osvoji zvezdice za brzo rešavanje!",
+      "got_it": "Razumem!",
+      "skip": "Preskoči"
+    },
+    "about": {
+      "title": "O igri HemiLab",
+      "description": "HemiLab je edukativna igra koja pomaže učenicima da nauče hemiju kroz zabavno igranje.",
+      "target_audience": "Namenjena učenicima 7. i 8. razreda osnovne škole.",
+      "credits": "Napravljeno sa ljubavlju za hemiju!",
+      "privacy": "Politika privatnosti",
+      "terms": "Uslovi korišćenja"
+    },
+    "notifications": {
+      "new_element": "Novi element otključan: {element}!",
+      "new_molecule": "Novi molekul otkriven: {molecule}!",
+      "chapter_complete": "Poglavlje završeno!",
+      "achievement": "Dostignuće otključano!"
+    },
+    "errors": {
+      "load_failed": "Greška pri učitavanju. Pokušaj ponovo.",
+      "save_failed": "Greška pri čuvanju napretka.",
+      "generic": "Nešto nije u redu. Pokušaj ponovo."
+    },
+    "common": {
+      "ok": "U redu",
+      "cancel": "Otkaži",
+      "yes": "Da",
+      "no": "Ne",
+      "back": "Nazad",
+      "next": "Dalje",
+      "close": "Zatvori",
+      "loading": "Učitavanje...",
+      "saving": "Čuvanje..."
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+	"c3dtg": true,
+	"name": "eLaboratory",
+	"events": [
+		{"eventType": "comment", "text": "=== LABORATORY - Periodic Table ==="},
+		{"eventType": "include", "includeSheet": "eGlobal"},
+		{"eventType": "include", "includeSheet": "eUI"},
+		{
+			"eventType": "comment",
+			"text": "CreatePeriodicTable - Generate element cells from JSON"
+		},
+		{
+			"eventType": "comment",
+			"text": "ElementCell Touch - Show element detail panel"
+		},
+		{
+			"eventType": "comment",
+			"text": "MoleculesTab - Show discovered molecules grid"
+		}
+	]
+}

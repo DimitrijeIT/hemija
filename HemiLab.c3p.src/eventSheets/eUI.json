@@ -1,0 +1,28 @@
+{
+	"c3dtg": true,
+	"name": "eUI",
+	"events": [
+		{"eventType": "comment", "text": "=== UI SYSTEM ==="},
+		{"eventType": "include", "includeSheet": "eGlobal"},
+		{
+			"eventType": "comment",
+			"text": "Button hover effects - Scale up on mouse over"
+		},
+		{
+			"eventType": "comment",
+			"text": "Button press effects - Scale down, play click sound"
+		},
+		{
+			"eventType": "comment",
+			"text": "Star animation - Pop in stars one by one"
+		},
+		{
+			"eventType": "comment",
+			"text": "Notification system - Slide in/out banners"
+		},
+		{
+			"eventType": "comment",
+			"text": "Layout transitions - Fade between screens"
+		}
+	]
+}

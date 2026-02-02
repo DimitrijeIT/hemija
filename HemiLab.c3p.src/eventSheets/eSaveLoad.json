@@ -1,0 +1,24 @@
+{
+	"c3dtg": true,
+	"name": "eSaveLoad",
+	"events": [
+		{"eventType": "comment", "text": "=== SAVE/LOAD SYSTEM ==="},
+		{"eventType": "include", "includeSheet": "eGlobal"},
+		{
+			"eventType": "comment",
+			"text": "SaveProgress - Store all progress to LocalStorage as JSON"
+		},
+		{
+			"eventType": "comment",
+			"text": "LoadProgress - Retrieve and parse progress from LocalStorage"
+		},
+		{
+			"eventType": "comment",
+			"text": "SaveLevelProgress - Update stars for specific chapter/level"
+		},
+		{
+			"eventType": "comment",
+			"text": "IsLevelUnlocked - Check if player has enough stars"
+		}
+	]
+}

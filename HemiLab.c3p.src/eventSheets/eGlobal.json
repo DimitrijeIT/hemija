@@ -1,0 +1,125 @@
+{
+	"c3dtg": true,
+	"name": "eGlobal",
+	"events": [
+		{
+			"eventType": "variable",
+			"name": "CurrentChapter",
+			"type": "number",
+			"initialValue": "1",
+			"comment": "Current chapter being played"
+		},
+		{
+			"eventType": "variable",
+			"name": "CurrentLevel",
+			"type": "number",
+			"initialValue": "1",
+			"comment": "Current level within chapter"
+		},
+		{
+			"eventType": "variable",
+			"name": "CurrentMoleculeId",
+			"type": "string",
+			"initialValue": "\"\"",
+			"comment": "ID of current molecule to build"
+		},
+		{
+			"eventType": "variable",
+			"name": "TimeRemaining",
+			"type": "number",
+			"initialValue": "60",
+			"comment": "Seconds remaining in level"
+		},
+		{
+			"eventType": "variable",
+			"name": "TimeLimit",
+			"type": "number",
+			"initialValue": "60",
+			"comment": "Total time for level"
+		},
+		{
+			"eventType": "variable",
+			"name": "Score",
+			"type": "number",
+			"initialValue": "0",
+			"comment": "Current level score"
+		},
+		{
+			"eventType": "variable",
+			"name": "HintsUsed",
+			"type": "number",
+			"initialValue": "0",
+			"comment": "Hints used in current level"
+		},
+		{
+			"eventType": "variable",
+			"name": "StarsEarned",
+			"type": "number",
+			"initialValue": "0",
+			"comment": "Stars earned in current level"
+		},
+		{
+			"eventType": "variable",
+			"name": "TotalCoins",
+			"type": "number",
+			"initialValue": "0",
+			"comment": "Total coins collected"
+		},
+		{
+			"eventType": "variable",
+			"name": "TotalStars",
+			"type": "number",
+			"initialValue": "0",
+			"comment": "Total stars collected"
+		},
+		{
+			"eventType": "variable",
+			"name": "HintsRemaining",
+			"type": "number",
+			"initialValue": "5",
+			"comment": "Remaining hints available"
+		},
+		{
+			"eventType": "variable",
+			"name": "SoundEnabled",
+			"type": "boolean",
+			"initialValue": "true",
+			"comment": "Sound effects enabled"
+		},
+		{
+			"eventType": "variable",
+			"name": "MusicEnabled",
+			"type": "boolean",
+			"initialValue": "true",
+			"comment": "Music enabled"
+		},
+		{
+			"eventType": "variable",
+			"name": "ScriptType",
+			"type": "string",
+			"initialValue": "\"latin\"",
+			"comment": "latin or cyrillic"
+		},
+		{
+			"eventType": "variable",
+			"name": "COPPAMode",
+			"type": "boolean",
+			"initialValue": "true",
+			"comment": "COPPA restrictions enabled"
+		},
+		{
+			"eventType": "variable",
+			"name": "IsLevelActive",
+			"type": "boolean",
+			"initialValue": "false",
+			"comment": "Is gameplay currently active"
+		},
+		{
+			"eventType": "variable",
+			"name": "DataLoaded",
+			"type": "boolean",
+			"initialValue": "false",
+			"comment": "Have all JSON files loaded"
+		}
+	]
+}

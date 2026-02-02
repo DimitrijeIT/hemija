@@ -1,0 +1,16 @@
+{
+	"c3dtg": true,
+	"name": "Laboratory",
+	"width": 1280,
+	"height": 720,
+	"eventSheetName": "eLaboratory",
+	"scrollX": 640,
+	"scrollY": 360,
+	"scale": 1,
+	"layers": [
+		{"name": "Background", "initialVisible": true, "transparent": false, "backgroundColor": [26, 26, 46], "zElevation": 0, "instances": []},
+		{"name": "Content", "initialVisible": true, "transparent": true, "zElevation": 50, "instances": []},
+		{"name": "DetailPanel", "initialVisible": false, "transparent": true, "zElevation": 150, "instances": []},
+		{"name": "UI", "initialVisible": true, "transparent": true, "zElevation": 100, "instances": []}
+	]
+}

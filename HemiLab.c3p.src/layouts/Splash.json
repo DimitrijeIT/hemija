@@ -1,0 +1,42 @@
+{
+	"c3dtg": true,
+	"name": "Splash",
+	"width": 1280,
+	"height": 720,
+	"eventSheetName": "eDataLoader",
+	"eventSheet": null,
+	"scrollX": 640,
+	"scrollY": 360,
+	"scale": 1,
+	"unboundedScrolling": false,
+	"layers": [
+		{
+			"name": "Background",
+			"initialVisible": true,
+			"ownTexture": false,
+			"parallaxX": 100,
+			"parallaxY": 100,
+			"zElevation": 0,
+			"transparent": false,
+			"backgroundColor": [26, 26, 46],
+			"opacity": 100,
+			"blendMode": "normal",
+			"visible": true,
+			"instances": []
+		},
+		{
+			"name": "UI",
+			"initialVisible": true,
+			"ownTexture": false,
+			"parallaxX": 100,
+			"parallaxY": 100,
+			"zElevation": 100,
+			"transparent": true,
+			"backgroundColor": [255, 255, 255],
+			"opacity": 100,
+			"blendMode": "normal",
+			"visible": true,
+			"instances": []
+		}
+	]
+}

@@ -1,0 +1,257 @@
+{
+  "version": "1.0.0",
+  "molecules": [
+    {
+      "id": "h2",
+      "formula": "H2",
+      "name_sr": "Molekul vodonika",
+      "ingredients": [
+        { "element_id": "H", "count": 2 }
+      ],
+      "bond_type": "single",
+      "chapter": 1,
+      "level": 1,
+      "difficulty": 1,
+      "base_points": 50,
+      "time_limit_seconds": 60,
+      "hint_text": "Dva atoma vodonika se spajaju",
+      "fun_fact": "Vodonik je gorivo budućnosti! Auti na vodonik ispuštaju samo čistu vodu."
+    },
+    {
+      "id": "o2",
+      "formula": "O2",
+      "name_sr": "Molekul kiseonika",
+      "ingredients": [
+        { "element_id": "O", "count": 2 }
+      ],
+      "bond_type": "double",
+      "chapter": 1,
+      "level": 2,
+      "difficulty": 1,
+      "base_points": 50,
+      "time_limit_seconds": 60,
+      "hint_text": "Dva atoma kiseonika se spajaju dvostrukom vezom",
+      "fun_fact": "Ovo je gas koji dišemo! Biljke ga proizvode tokom fotosinteze."
+    },
+    {
+      "id": "h2o",
+      "formula": "H2O",
+      "name_sr": "Voda",
+      "ingredients": [
+        { "element_id": "H", "count": 2 },
+        { "element_id": "O", "count": 1 }
+      ],
+      "bond_type": "single",
+      "chapter": 1,
+      "level": 3,
+      "difficulty": 1,
+      "base_points": 75,
+      "time_limit_seconds": 45,
+      "hint_text": "Dva atoma vodonika + jedan atom kiseonika",
+      "fun_fact": "Voda pokriva 71% površine Zemlje! Ljudsko telo je 60% voda."
+    },
+    {
+      "id": "co2",
+      "formula": "CO2",
+      "name_sr": "Ugljen-dioksid",
+      "ingredients": [
+        { "element_id": "C", "count": 1 },
+        { "element_id": "O", "count": 2 }
+      ],
+      "bond_type": "double",
+      "chapter": 1,
+      "level": 4,
+      "difficulty": 2,
+      "base_points": 100,
+      "time_limit_seconds": 45,
+      "hint_text": "Jedan atom ugljenika + dva atoma kiseonika",
+      "fun_fact": "Izdišemo CO2, a biljke ga koriste za rast! Pravi mehuriće u gaziranim pićima."
+    },
+    {
+      "id": "n2",
+      "formula": "N2",
+      "name_sr": "Molekul azota",
+      "ingredients": [
+        { "element_id": "N", "count": 2 }
+      ],
+      "bond_type": "triple",
+      "chapter": 1,
+      "level": 5,
+      "difficulty": 1,
+      "base_points": 75,
+      "time_limit_seconds": 50,
+      "hint_text": "Dva atoma azota se spajaju trostrukom vezom",
+      "fun_fact": "Azot čini 78% vazduha! Koristi se za čuvanje hrane i u led mašinama."
+    },
+    {
+      "id": "nacl",
+      "formula": "NaCl",
+      "name_sr": "Natrijum-hlorid (kuhinjska so)",
+      "ingredients": [
+        { "element_id": "Na", "count": 1 },
+        { "element_id": "Cl", "count": 1 }
+      ],
+      "bond_type": "ionic",
+      "chapter": 1,
+      "level": 6,
+      "difficulty": 2,
+      "base_points": 100,
+      "time_limit_seconds": 40,
+      "hint_text": "Jedan atom natrijuma + jedan atom hlora = so!",
+      "fun_fact": "Ovo je obična kuhinjska so! Potrebna je za život, ali previše nije zdravo."
+    },
+    {
+      "id": "hcl",
+      "formula": "HCl",
+      "name_sr": "Hlorovodonična kiselina",
+      "ingredients": [
+        { "element_id": "H", "count": 1 },
+        { "element_id": "Cl", "count": 1 }
+      ],
+      "bond_type": "single",
+      "chapter": 1,
+      "level": 7,
+      "difficulty": 2,
+      "base_points": 100,
+      "time_limit_seconds": 40,
+      "hint_text": "Jedan atom vodonika + jedan atom hlora",
+      "fun_fact": "Tvoj stomak proizvodi ovu kiselinu za varenje hrane!"
+    },
+    {
+      "id": "ch4",
+      "formula": "CH4",
+      "name_sr": "Metan",
+      "ingredients": [
+        { "element_id": "C", "count": 1 },
+        { "element_id": "H", "count": 4 }
+      ],
+      "bond_type": "single",
+      "chapter": 2,
+      "level": 1,
+      "difficulty": 2,
+      "base_points": 125,
+      "time_limit_seconds": 50,
+      "hint_text": "Jedan ugljenik okružen sa četiri vodonika",
+      "fun_fact": "Metan je glavni sastojak prirodnog gasa! Krave ga proizvode kad vare travu."
+    },
+    {
+      "id": "nh3",
+      "formula": "NH3",
+      "name_sr": "Amonijak",
+      "ingredients": [
+        { "element_id": "N", "count": 1 },
+        { "element_id": "H", "count": 3 }
+      ],
+      "bond_type": "single",
+      "chapter": 2,
+      "level": 2,
+      "difficulty": 2,
+      "base_points": 125,
+      "time_limit_seconds": 45,
+      "hint_text": "Jedan azot + tri vodonika",
+      "fun_fact": "Amonijak ima jak miris! Koristi se za pravljenje đubriva i sredstava za čišćenje."
+    },
+    {
+      "id": "h2s",
+      "formula": "H2S",
+      "name_sr": "Vodonik-sulfid",
+      "ingredients": [
+        { "element_id": "H", "count": 2 },
+        { "element_id": "S", "count": 1 }
+      ],
+      "bond_type": "single",
+      "chapter": 2,
+      "level": 3,
+      "difficulty": 2,
+      "base_points": 125,
+      "time_limit_seconds": 45,
+      "hint_text": "Dva vodonika + jedan sumpor",
+      "fun_fact": "Ovo je gas koji miriše na pokvarena jaja! Nalazi se u vulkanskim gasovima."
+    },
+    {
+      "id": "cacl2",
+      "formula": "CaCl2",
+      "name_sr": "Kalcijum-hlorid",
+      "ingredients": [
+        { "element_id": "Ca", "count": 1 },
+        { "element_id": "Cl", "count": 2 }
+      ],
+      "bond_type": "ionic",
+      "chapter": 2,
+      "level": 4,
+      "difficulty": 3,
+      "base_points": 150,
+      "time_limit_seconds": 40,
+      "hint_text": "Jedan kalcijum + dva hlora",
+      "fun_fact": "Koristi se za topljenje leda na putevima zimi!"
+    },
+    {
+      "id": "mgo",
+      "formula": "MgO",
+      "name_sr": "Magnezijum-oksid",
+      "ingredients": [
+        { "element_id": "Mg", "count": 1 },
+        { "element_id": "O", "count": 1 }
+      ],
+      "bond_type": "ionic",
+      "chapter": 2,
+      "level": 5,
+      "difficulty": 2,
+      "base_points": 125,
+      "time_limit_seconds": 45,
+      "hint_text": "Jedan magnezijum + jedan kiseonik",
+      "fun_fact": "Nastaje kada magnezijum gori! Koristi se protiv gorušice."
+    },
+    {
+      "id": "kcl",
+      "formula": "KCl",
+      "name_sr": "Kalijum-hlorid",
+      "ingredients": [
+        { "element_id": "K", "count": 1 },
+        { "element_id": "Cl", "count": 1 }
+      ],
+      "bond_type": "ionic",
+      "chapter": 2,
+      "level": 6,
+      "difficulty": 2,
+      "base_points": 125,
+      "time_limit_seconds": 45,
+      "hint_text": "Jedan kalijum + jedan hlor",
+      "fun_fact": "Koristi se kao zamena za kuhinjsku so za ljude koji moraju da smanje unos natrijuma!"
+    },
+    {
+      "id": "fe2o3",
+      "formula": "Fe2O3",
+      "name_sr": "Gvožđe(III)-oksid (rđa)",
+      "ingredients": [
+        { "element_id": "Fe", "count": 2 },
+        { "element_id": "O", "count": 3 }
+      ],
+      "bond_type": "ionic",
+      "chapter": 2,
+      "level": 7,
+      "difficulty": 3,
+      "base_points": 175,
+      "time_limit_seconds": 60,
+      "hint_text": "Dva gvožđa + tri kiseonika = rđa!",
+      "fun_fact": "Ovo je obična rđa! Mars je crven zbog ovog jedinjenja na površini."
+    },
+    {
+      "id": "cao",
+      "formula": "CaO",
+      "name_sr": "Kalcijum-oksid (negašeni kreč)",
+      "ingredients": [
+        { "element_id": "Ca", "count": 1 },
+        { "element_id": "O", "count": 1 }
+      ],
+      "bond_type": "ionic",
+      "chapter": 2,
+      "level": 8,
+      "difficulty": 2,
+      "base_points": 125,
+      "time_limit_seconds": 45,
+      "hint_text": "Jedan kalcijum + jedan kiseonik",
+      "fun_fact": "Koristi se za pravljenje cementa i maltera! Prastari Rimljani su ga koristili."
+    }
+  ]
+}

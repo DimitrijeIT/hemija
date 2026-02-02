@@ -1,0 +1,20 @@
+{
+	"c3dtg": true,
+	"name": "eAudio",
+	"events": [
+		{"eventType": "comment", "text": "=== AUDIO SYSTEM ==="},
+		{"eventType": "include", "includeSheet": "eGlobal"},
+		{
+			"eventType": "comment",
+			"text": "ApplyAudioSettings - Set volume based on SoundEnabled/MusicEnabled"
+		},
+		{
+			"eventType": "comment",
+			"text": "PlaySFX function - Play sound effect if enabled"
+		},
+		{
+			"eventType": "comment",
+			"text": "PlayMusic function - Crossfade to new music track"
+		}
+	]
+}

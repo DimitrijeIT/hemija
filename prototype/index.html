@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HemiLab - Hemijska Laboratorija</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+
+        /* Game Canvas Container */
+        #gameContainer {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Scenes */
+        .scene {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .scene.active {
+            display: block;
+        }
+
+        /* === INTRO SCENE === */
+        #introScene {
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+        }
+
+        .outdoor-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sun {
+            position: absolute;
+            top: 50px;
+            right: 100px;
+            width: 80px;
+            height: 80px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 60px #FFD700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .cloud1 { top: 80px; left: 10%; width: 100px; height: 40px; }
+        .cloud1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
+        .cloud1::after { width: 60px; height: 60px; top: -35px; left: 40px; }
+
+        .cloud2 { top: 120px; left: 60%; width: 120px; height: 45px; animation-delay: -3s; }
+        .cloud2::before { width: 55px; height: 55px; top: -30px; left: 20px; }
+        .cloud2::after { width: 70px; height: 70px; top: -40px; left: 50px; }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(30px); }
+        }
+
+        .grass {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(180deg, #228B22 0%, #006400 100%);
+        }
+
+        .path {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 200px;
+            background: linear-gradient(90deg, #8B7355 0%, #A0826D 50%, #8B7355 100%);
+            clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+        }
+
+        /* Lab Building */
+        .lab-building {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 300px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .lab-building:hover {
+            transform: translateX(-50%) scale(1.02);
+        }
+
+        .building-main {
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(180deg, #E8E8E8 0%, #D3D3D3 100%);
+            border-radius: 10px 10px 0 0;
+            border: 4px solid #888;
+        }
+
+        .building-roof {
+            position: absolute;
+            bottom: 200px;
+            left: 30px;
+            width: 340px;
+            height: 80px;
+            background: linear-gradient(180deg, #8B0000 0%, #A52A2A 100%);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+        }
+
+        .building-door {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(180deg, #4A90D9 0%, #357ABD 100%);
+            border-radius: 10px 10px 0 0;
+            border: 4px solid #2E6DA4;
+        }
+
+        .door-window {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: #87CEEB;
+            border-radius: 50%;
+            border: 3px solid #2E6DA4;
+        }
+
+        .building-window {
+            position: absolute;
+            width: 50px;
+            height: 60px;
+            background: #87CEEB;
+            border: 4px solid #666;
+            border-radius: 5px;
+        }
+
+        .window1 { bottom: 100px; left: 30px; }
+        .window2 { bottom: 100px; right: 30px; }
+
+        .lab-sign {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4A90D9;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 3px solid #2E6DA4;
+            white-space: nowrap;
+        }
+
+        .flask-decoration {
+            position: absolute;
+            bottom: 220px;
+            font-size: 3rem;
+        }
+
+        .flask-left { left: 80px; animation: bubble 2s infinite; }
+        .flask-right { right: 80px; animation: bubble 2s infinite 1s; }
+
+        @keyframes bubble {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Character */
+        .character {
+            position: absolute;
+            bottom: 130px;
+            width: 80px;
+            height: 120px;
+            transition: left 0.5s ease-out;
+            cursor: pointer;
+        }
+
+        .character-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .char-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: #FFE4C4;
+            border-radius: 50%;
+            border: 3px solid #DEB887;
+        }
+
+        .char-eyes {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .char-eye {
+            width: 10px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            animation: blink 3s infinite;
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        .char-smile {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 10px;
+            border: 3px solid #333;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .char-hair {
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55px;
+            height: 30px;
+            background: #8B4513;
+            border-radius: 30px 30px 0 0;
+        }
+
+        .char-body-main {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 45px;
+            height: 50px;
+            background: #4A90D9;
+            border-radius: 10px;
+        }
+
+        .char-lab-coat {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55px;
+            height: 55px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #DDD;
+        }
+
+        .char-legs {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+        }
+
+        .char-leg {
+            width: 15px;
+            height: 30px;
+            background: #333;
+            border-radius: 5px;
+        }
+
+        .char-walking .char-leg:first-child {
+            animation: walkLeft 0.3s infinite;
+        }
+
+        .char-walking .char-leg:last-child {
+            animation: walkRight 0.3s infinite;
+        }
+
+        @keyframes walkLeft {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        @keyframes walkRight {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(-15deg); }
+        }
+
+        /* Speech Bubble */
+        .speech-bubble {
+            position: absolute;
+            bottom: 140px;
+            left: 90px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            color: #333;
+            max-width: 250px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 30px;
+            border: 15px solid transparent;
+            border-top-color: white;
+            border-bottom: none;
+        }
+
+        /* Intro UI */
+        .intro-ui {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 3.5rem;
+            color: #4A90D9;
+            text-shadow: 3px 3px 0 white, 6px 6px 0 rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .game-subtitle {
+            font-size: 1.3rem;
+            color: #2E6DA4;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 20px;
+            border-radius: 20px;
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            color: #4A90D9;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* === LAB SCENE === */
+        #labScene {
+            background: linear-gradient(180deg, #2C3E50 0%, #1a1a2e 100%);
+        }
+
+        .lab-interior {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .lab-wall {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(180deg, #34495E 0%, #2C3E50 100%);
+        }
+
+        .lab-floor {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(180deg, #5D6D7E 0%, #4A5568 100%);
+        }
+
+        .floor-tiles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 100px,
+                rgba(255,255,255,0.05) 100px,
+                rgba(255,255,255,0.05) 102px
+            );
+        }
+
+        /* Lab Workbench */
+        .workbench {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 900px;
+            height: 120px;
+            background: linear-gradient(180deg, #8B7355 0%, #6B5344 100%);
+            border-radius: 10px;
+            border: 5px solid #5D4037;
+            z-index: 1;
+        }
+
+        .workbench-top {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            height: 30px;
+            background: linear-gradient(180deg, #4A4A4A 0%, #333 100%);
+            border-radius: 5px;
+        }
+
+        /* Element Shelf */
+        .element-shelf {
+            position: absolute;
+            top: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            max-width: 950px;
+            background: linear-gradient(180deg, #5D4037 0%, #4E342E 100%);
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 4px solid #3E2723;
+            z-index: 5;
+        }
+
+        .shelf-label {
+            color: #FFD700;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .element-jars {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Element Jars */
+        .element-jar {
+            width: 65px;
+            height: 85px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .element-jar:hover {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        .element-jar:active {
+            transform: scale(0.95);
+        }
+
+        .jar-glass {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 5px 5px 12px 12px;
+            overflow: hidden;
+        }
+
+        .jar-contents {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80%;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .jar-lid {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 15px;
+            background: linear-gradient(180deg, #666 0%, #444 100%);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .jar-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .jar-symbol {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Element-specific jar contents */
+        .jar-H .jar-contents {
+            background: linear-gradient(180deg, transparent 0%, rgba(200,230,255,0.6) 100%);
+        }
+        .jar-H .jar-contents::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.8) 2px, transparent 2px),
+                        radial-gradient(circle at 60% 50%, rgba(255,255,255,0.8) 2px, transparent 2px),
+                        radial-gradient(circle at 40% 30%, rgba(255,255,255,0.8) 2px, transparent 2px);
+            animation: bubbleFloat 2s infinite;
+        }
+
+        .jar-O .jar-contents {
+            background: linear-gradient(180deg, rgba(100,180,255,0.3) 0%, rgba(100,180,255,0.6) 100%);
+        }
+
+        .jar-C .jar-contents {
+            background: linear-gradient(180deg, #333 0%, #111 100%);
+        }
+        .jar-C .jar-contents::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 70%, #444 5px, transparent 5px),
+                        radial-gradient(circle at 60% 40%, #444 4px, transparent 4px),
+                        radial-gradient(circle at 45% 55%, #444 6px, transparent 6px);
+        }
+
+        .jar-Na .jar-contents {
+            background: linear-gradient(180deg, #C0C0C0 0%, #A0A0A0 100%);
+        }
+        .jar-Na .jar-contents::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.3) 25%, transparent 25%);
+        }
+
+        .jar-Cl .jar-contents {
+            background: linear-gradient(180deg, rgba(180,255,180,0.4) 0%, rgba(100,200,100,0.7) 100%);
+            animation: gasSwirl 3s infinite;
+        }
+
+        .jar-N .jar-contents {
+            background: linear-gradient(180deg, rgba(100,100,255,0.3) 0%, rgba(100,100,255,0.5) 100%);
+        }
+
+        .jar-S .jar-contents {
+            background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+        }
+        .jar-S .jar-contents::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 35% 60%, #FFE44D 4px, transparent 4px),
+                        radial-gradient(circle at 55% 40%, #FFE44D 3px, transparent 3px);
+        }
+
+        @keyframes bubbleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes gasSwirl {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Reaction Area */
+        .reaction-area {
+            position: absolute;
+            bottom: 18%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 900px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .reaction-slot {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.1);
+            border: 3px dashed rgba(255,255,255,0.3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .reaction-slot.highlight {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.2);
+            transform: scale(1.05);
+        }
+
+        .reaction-slot.filled {
+            border-style: solid;
+            border-color: #4ecdc4;
+        }
+
+        .plus-sign {
+            font-size: 1.8rem;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .equals-sign {
+            font-size: 1.8rem;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .result-slot {
+            width: 100px;
+            height: 90px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 3px dashed rgba(255, 215, 0, 0.4);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .result-slot.success {
+            border-style: solid;
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.2);
+            animation: successPulse 0.5s;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Atom in Slot */
+        .slot-atom {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: atomAppear 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        @keyframes atomAppear {
+            0% { transform: scale(0) rotate(-180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .slot-atom .symbol {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .slot-atom .electron-ring {
+            position: absolute;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: orbit 2s linear infinite;
+        }
+
+        .ring1 { width: 75px; height: 75px; }
+        .ring2 { width: 85px; height: 85px; animation-direction: reverse; animation-duration: 3s; }
+
+        .electron {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #FFF;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #FFF;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Result Molecule Display */
+        .result-molecule {
+            text-align: center;
+            animation: moleculeForm 0.5s;
+        }
+
+        @keyframes moleculeForm {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .molecule-visual {
+            font-size: 2rem;
+            margin-bottom: 3px;
+        }
+
+        .molecule-name {
+            color: white;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.3);
+            padding: 3px 8px;
+            border-radius: 8px;
+        }
+
+        /* Controls */
+        .lab-controls {
+            position: absolute;
+            bottom: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        .lab-btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+
+        .lab-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-react {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            box-shadow: 0 5px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+        }
+
+        /* Lab Character */
+        .lab-character {
+            position: absolute;
+            bottom: 15%;
+            right: 2%;
+            width: 60px;
+            height: 90px;
+            z-index: 2;
+            transform: scale(0.7);
+        }
+
+        /* Chapter Tabs */
+        .chapter-tabs {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 15;
+        }
+
+        .chapter-tab {
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .chapter-tab:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .chapter-tab.active {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            border-color: white;
+        }
+
+        .chapter-tab .chapter-emoji {
+            margin-right: 5px;
+        }
+
+        /* Target Display */
+        .target-display {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.5);
+            padding: 10px 30px;
+            border-radius: 30px;
+            color: white;
+            text-align: center;
+            border: 3px solid #4ecdc4;
+        }
+
+        .target-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+
+        .target-formula {
+            font-size: 1.5rem;
+            color: #4ecdc4;
+        }
+
+        /* Level Selector in Lab */
+        .level-nav {
+            position: absolute;
+            top: 125px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 15;
+        }
+
+        .level-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .level-dot:hover {
+            transform: scale(1.15);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .level-dot.active {
+            background: #4ecdc4;
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .level-dot.completed {
+            background: #2ecc71;
+            border-color: #27ae60;
+        }
+
+        /* Stars Display */
+        .stars-display {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .stars-display .star {
+            font-size: 1.5rem;
+            color: #f1c40f;
+        }
+
+        .stars-count {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Reaction Animation Overlay */
+        .reaction-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .reaction-overlay.active {
+            display: flex;
+        }
+
+        .reaction-animation {
+            text-align: center;
+            color: white;
+        }
+
+        .reaction-visual {
+            font-size: 8rem;
+            margin-bottom: 30px;
+            animation: reactionPop 0.5s;
+        }
+
+        @keyframes reactionPop {
+            0% { transform: scale(0) rotate(-180deg); }
+            70% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .reaction-equation {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #4ecdc4;
+        }
+
+        .reaction-name {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .reaction-fact {
+            font-size: 1.2rem;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            padding: 20px;
+            background: rgba(78, 205, 196, 0.2);
+            border-radius: 15px;
+            border-left: 5px solid #4ecdc4;
+        }
+
+        .reaction-stars {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .reaction-stars .star {
+            margin: 0 10px;
+            opacity: 0.3;
+            transition: all 0.3s;
+        }
+
+        .reaction-stars .star.earned {
+            opacity: 1;
+            color: #f1c40f;
+            animation: starEarn 0.5s;
+        }
+
+        @keyframes starEarn {
+            0% { transform: scale(0) rotate(-180deg); }
+            70% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-continue {
+            padding: 15px 50px;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn-continue:hover {
+            transform: scale(1.05);
+        }
+
+        /* Error shake */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.3s;
+        }
+
+        /* Particles */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            animation: particleFly 1s forwards;
+        }
+
+        @keyframes particleFly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* Atom colors */
+        .atom-H { background: radial-gradient(circle at 30% 30%, #fff, #ccc); }
+        .atom-O { background: radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b); }
+        .atom-C { background: radial-gradient(circle at 30% 30%, #555, #222); }
+        .atom-N { background: radial-gradient(circle at 30% 30%, #5dade2, #2471a3); }
+        .atom-Na { background: radial-gradient(circle at 30% 30%, #bb8fce, #7d3c98); }
+        .atom-Cl { background: radial-gradient(circle at 30% 30%, #58d68d, #239b56); }
+        .atom-S { background: radial-gradient(circle at 30% 30%, #f7dc6f, #d4ac0d); }
+        .atom-Ca { background: radial-gradient(circle at 30% 30%, #abebc6, #52be80); }
+        .atom-P { background: radial-gradient(circle at 30% 30%, #ff9f43, #ee5a24); }
+
+        /* Phosphorus jar */
+        .jar-P .jar-contents {
+            background: linear-gradient(180deg, #ff9f43 0%, #ee5a24 100%);
+            animation: glowPulse 2s infinite;
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: inset 0 0 10px rgba(255,159,67,0.5); }
+            50% { box-shadow: inset 0 0 20px rgba(255,159,67,0.8); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .game-title { font-size: 2rem; }
+            .element-jar { width: 60px; height: 80px; }
+            .jar-glass { width: 45px; height: 55px; }
+            .reaction-slot { width: 70px; height: 70px; }
+            .slot-atom { width: 55px; height: 55px; }
+            .slot-atom .symbol { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- INTRO SCENE -->
+        <div id="introScene" class="scene active">
+            <div class="outdoor-bg">
+                <div class="sun"></div>
+                <div class="cloud cloud1"></div>
+                <div class="cloud cloud2"></div>
+                <div class="grass"></div>
+                <div class="path"></div>
+            </div>
+
+            <div class="intro-ui">
+                <h1 class="game-title">🧪 HemiLab 🔬</h1>
+                <p class="game-subtitle">Hemijska Laboratorija za Male Naučnike</p>
+            </div>
+
+            <div class="lab-building" onclick="enterLab()">
+                <div class="lab-sign">🔬 LABORATORIJA 🧪</div>
+                <div class="flask-decoration flask-left">🧪</div>
+                <div class="flask-decoration flask-right">⚗️</div>
+                <div class="building-roof"></div>
+                <div class="building-main">
+                    <div class="building-window window1"></div>
+                    <div class="building-window window2"></div>
+                    <div class="building-door">
+                        <div class="door-window"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="character" id="character" style="left: 100px;">
+                <div class="character-body">
+                    <div class="char-hair"></div>
+                    <div class="char-head">
+                        <div class="char-eyes">
+                            <div class="char-eye"></div>
+                            <div class="char-eye"></div>
+                        </div>
+                        <div class="char-smile"></div>
+                    </div>
+                    <div class="char-lab-coat"></div>
+                    <div class="char-legs">
+                        <div class="char-leg"></div>
+                        <div class="char-leg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="speech-bubble" id="speechBubble">
+                Zdravo! Ja sam Mali Hemičar! 👋<br>Klikni na laboratoriju da uđemo!
+            </div>
+
+            <div class="click-hint">👆 Klikni na laboratoriju za početak!</div>
+        </div>
+
+        <!-- LAB SCENE -->
+        <div id="labScene" class="scene">
+            <div class="lab-interior">
+                <div class="lab-wall"></div>
+                <div class="lab-floor">
+                    <div class="floor-tiles"></div>
+                </div>
+            </div>
+
+            <div class="stars-display">
+                <span class="star">⭐</span>
+                <span class="stars-count" id="totalStars">0</span>
+            </div>
+
+            <div class="chapter-tabs" id="chapterTabs">
+                <!-- Generated dynamically -->
+            </div>
+
+            <div class="target-display">
+                <div class="target-label" id="targetLabel">Poglavlje 1: Osnovni elementi</div>
+                <div class="target-formula" id="targetFormula">H₂O - VODA</div>
+            </div>
+
+            <div class="level-nav" id="levelNav">
+                <!-- Generated dynamically -->
+            </div>
+
+            <div class="element-shelf">
+                <div class="shelf-label">🧪 Elementi - klikni da dodaš u reakciju!</div>
+                <div class="element-jars" id="elementJars">
+                    <!-- Generated dynamically -->
+                </div>
+            </div>
+
+            <div class="reaction-area" id="reactionArea">
+                <!-- Generated dynamically -->
+            </div>
+
+            <div class="workbench">
+                <div class="workbench-top"></div>
+            </div>
+
+            <div class="lab-controls">
+                <button class="lab-btn btn-back" onclick="goToIntro()">🚪 Izađi</button>
+                <button class="lab-btn btn-clear" onclick="clearReaction()">🗑️ Obriši</button>
+                <button class="lab-btn btn-react" onclick="startReaction()">⚗️ Reaguj!</button>
+            </div>
+
+            <div class="lab-character">
+                <div class="character-body">
+                    <div class="char-hair"></div>
+                    <div class="char-head">
+                        <div class="char-eyes">
+                            <div class="char-eye"></div>
+                            <div class="char-eye"></div>
+                        </div>
+                        <div class="char-smile"></div>
+                    </div>
+                    <div class="char-lab-coat"></div>
+                    <div class="char-legs">
+                        <div class="char-leg"></div>
+                        <div class="char-leg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REACTION OVERLAY -->
+        <div class="reaction-overlay" id="reactionOverlay">
+            <div class="reaction-animation">
+                <div class="reaction-visual" id="reactionVisual">💧</div>
+                <div class="reaction-equation" id="reactionEquation">2H + O → H₂O</div>
+                <div class="reaction-name" id="reactionName">VODA!</div>
+                <div class="reaction-fact" id="reactionFact">
+                    Voda pokriva 71% površine Zemlje! Ljudsko telo je 60% voda.
+                </div>
+                <div class="reaction-stars">
+                    <span class="star" id="star1">⭐</span>
+                    <span class="star" id="star2">⭐</span>
+                    <span class="star" id="star3">⭐</span>
+                </div>
+                <button class="btn-continue" onclick="continueGame()">Sledeći molekul! →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game Data
+        const elements = {
+            H: { symbol: 'H', name: 'Vodonik', color: 'atom-H', emoji: '💨', desc: 'Najlakši gas' },
+            O: { symbol: 'O', name: 'Kiseonik', color: 'atom-O', emoji: '🌬️', desc: 'Gas koji dišemo' },
+            C: { symbol: 'C', name: 'Ugljenik', color: 'atom-C', emoji: '⚫', desc: 'Crni prah' },
+            N: { symbol: 'N', name: 'Azot', color: 'atom-N', emoji: '💙', desc: 'Plavi gas' },
+            Na: { symbol: 'Na', name: 'Natrijum', color: 'atom-Na', emoji: '🪨', desc: 'Meki metal' },
+            Cl: { symbol: 'Cl', name: 'Hlor', color: 'atom-Cl', emoji: '💚', desc: 'Zeleni gas' },
+            S: { symbol: 'S', name: 'Sumpor', color: 'atom-S', emoji: '💛', desc: 'Žuti prah' },
+            Ca: { symbol: 'Ca', name: 'Kalcijum', color: 'atom-Ca', emoji: '🦴', desc: 'Za kosti' },
+            P: { symbol: 'P', name: 'Fosfor', color: 'atom-P', emoji: '🔥', desc: 'Svetli u mraku' }
+        };
+
+        // Chapter data for display
+        const chapters = [
+            { name: 'Osnovni elementi', start: 0, end: 6, emoji: '🧪' },
+            { name: 'Moćne molekule', start: 7, end: 13, emoji: '⚗️' }
+        ];
+
+        const molecules = [
+            // === CHAPTER 1: Osnovni elementi ===
+            {
+                id: 'h2o',
+                formula: 'H₂O',
+                name: 'VODA',
+                emoji: '💧',
+                chapter: 1,
+                ingredients: ['H', 'H', 'O'],
+                equation: '2H + O → H₂O',
+                funFact: 'Voda pokriva 71% površine Zemlje! Tvoje telo je 60% voda. Bez vode ne bi bilo života!',
+                elements: ['H', 'O']
+            },
+            {
+                id: 'nacl',
+                formula: 'NaCl',
+                name: 'KUHINJSKA SO',
+                emoji: '🧂',
+                chapter: 1,
+                ingredients: ['Na', 'Cl'],
+                equation: 'Na + Cl → NaCl',
+                funFact: 'Ovo je obična so koju jedeš! Natrijum eksplodira u vodi, a hlor je otrovan gas - ali zajedno prave ukusnu so!',
+                elements: ['Na', 'Cl']
+            },
+            {
+                id: 'co2',
+                formula: 'CO₂',
+                name: 'UGLJEN-DIOKSID',
+                emoji: '💨',
+                chapter: 1,
+                ingredients: ['C', 'O', 'O'],
+                equation: 'C + 2O → CO₂',
+                funFact: 'Ovaj gas izdišeš! Biljke ga koriste za hranu. Pravi mehuriće u gaziranim pićima! 🥤',
+                elements: ['C', 'O']
+            },
+            {
+                id: 'h2',
+                formula: 'H₂',
+                name: 'VODONIK GAS',
+                emoji: '🎈',
+                chapter: 1,
+                ingredients: ['H', 'H'],
+                equation: 'H + H → H₂',
+                funFact: 'Najlakši gas u svemiru! Koristi se kao gorivo za rakete! Sunce je ogromna lopta vodonika! ☀️',
+                elements: ['H']
+            },
+            {
+                id: 'o2',
+                formula: 'O₂',
+                name: 'KISEONIK',
+                emoji: '🌬️',
+                chapter: 1,
+                ingredients: ['O', 'O'],
+                equation: 'O + O → O₂',
+                funFact: 'Gas koji dišeš! Biljke ga prave. Bez kiseonika vatra ne može da gori! 🔥',
+                elements: ['O']
+            },
+            {
+                id: 'h2s',
+                formula: 'H₂S',
+                name: 'SMRDLJIVI GAS',
+                emoji: '🥚',
+                chapter: 1,
+                ingredients: ['H', 'H', 'S'],
+                equation: '2H + S → H₂S',
+                funFact: 'Miriše na pokvarena jaja! 🤢 Nalazi se u vulkanima i banjama sa termalnom vodom.',
+                elements: ['H', 'S']
+            },
+            {
+                id: 'caco3',
+                formula: 'CaCO₃',
+                name: 'KREDA',
+                emoji: '🖍️',
+                chapter: 1,
+                ingredients: ['Ca', 'C', 'O', 'O', 'O'],
+                equation: 'Ca + C + 3O → CaCO₃',
+                funFact: 'Od ovoga je napravljena kreda kojom pišeš po tabli! I školjke su od istog materijala! 🐚',
+                elements: ['Ca', 'C', 'O']
+            },
+            // === CHAPTER 2: Moćne molekule (Acids & Bases) ===
+            {
+                id: 'naoh',
+                formula: 'NaOH',
+                name: 'SAPUN',
+                emoji: '🧼',
+                chapter: 2,
+                ingredients: ['Na', 'O', 'H'],
+                equation: 'Na + O + H → NaOH',
+                funFact: 'Natrijum-hidroksid je glavni sastojak sapuna - zato se naziva i kaustična soda! 🧴',
+                elements: ['Na', 'O', 'H']
+            },
+            {
+                id: 'h2co3',
+                formula: 'H₂CO₃',
+                name: 'KISELA VODA',
+                emoji: '🥤',
+                chapter: 2,
+                ingredients: ['H', 'H', 'C', 'O', 'O', 'O'],
+                equation: '2H + C + 3O → H₂CO₃',
+                funFact: 'Ugljena kiselina daje mehuriće gaziranim pićima - svaki put kad piješ kiselu vodu, piješ ovu kiselinu!',
+                elements: ['H', 'C', 'O']
+            },
+            {
+                id: 'h2so4',
+                formula: 'H₂SO₄',
+                name: 'BATERIJSKA KISELINA',
+                emoji: '🔋',
+                chapter: 2,
+                ingredients: ['H', 'H', 'S', 'O', 'O', 'O', 'O'],
+                equation: '2H + S + 4O → H₂SO₄',
+                funFact: 'Sumporna kiselina se nalazi u svakom akumulatoru automobila - bez nje, auto ne bi mogao da upali! 🚗',
+                elements: ['H', 'S', 'O']
+            },
+            {
+                id: 'hno3',
+                formula: 'HNO₃',
+                name: 'ĐUBRIVO',
+                emoji: '🌱',
+                chapter: 2,
+                ingredients: ['H', 'N', 'O', 'O', 'O'],
+                equation: 'H + N + 3O → HNO₃',
+                funFact: 'Azotna kiselina je ključni sastojak veštačkih đubriva koja pomažu da hrana raste brže! 🥕',
+                elements: ['H', 'N', 'O']
+            },
+            {
+                id: 'caoh2',
+                formula: 'Ca(OH)₂',
+                name: 'FUDBALSKE LINIJE',
+                emoji: '⚽',
+                chapter: 2,
+                ingredients: ['Ca', 'O', 'O', 'H', 'H'],
+                equation: 'Ca + 2O + 2H → Ca(OH)₂',
+                funFact: 'Kalcijum-hidroksid (gašeni kreč) se koristi za crtanje linija na fudbalskim terenima! ⚽',
+                elements: ['Ca', 'O', 'H']
+            },
+            {
+                id: 'h3po4',
+                formula: 'H₃PO₄',
+                name: 'COCA-COLA',
+                emoji: '🥤',
+                chapter: 2,
+                ingredients: ['H', 'H', 'H', 'P', 'O', 'O', 'O', 'O'],
+                equation: '3H + P + 4O → H₃PO₄',
+                funFact: 'Fosforna kiselina daje Coca-Coli njen karakterističan ukus - nalazi se u svakoj limenci! 🧃',
+                elements: ['H', 'P', 'O']
+            },
+            {
+                id: 'nh4cl',
+                formula: 'NH₄Cl',
+                name: 'SLANA BOMBA',
+                emoji: '🍬',
+                chapter: 2,
+                ingredients: ['N', 'H', 'H', 'H', 'H', 'Cl'],
+                equation: 'N + 4H + Cl → NH₄Cl',
+                funFact: 'Amonijum-hlorid se koristi u lemljenju metala i dodaje se u slatke crne bombone zvane "salmiakki"! 🍭',
+                elements: ['N', 'H', 'Cl']
+            }
+        ];
+
+        // Game State
+        let currentLevel = 0;
+        let currentChapter = 1;
+        let totalStars = 0;
+        let completedLevels = [];
+        let currentSlots = [];
+        let maxSlots = 3;
+
+        // Initialize
+        function init() {
+            createChapterTabs();
+            createLevelNav();
+            loadLevel(0);
+        }
+
+        // Create chapter tabs
+        function createChapterTabs() {
+            const tabs = document.getElementById('chapterTabs');
+            tabs.innerHTML = '';
+            chapters.forEach((ch, i) => {
+                const tab = document.createElement('div');
+                tab.className = 'chapter-tab' + (i + 1 === currentChapter ? ' active' : '');
+                tab.innerHTML = `<span class="chapter-emoji">${ch.emoji}</span>${ch.name}`;
+                tab.onclick = () => switchChapter(i + 1);
+                tabs.appendChild(tab);
+            });
+        }
+
+        // Switch chapter
+        function switchChapter(chapterNum) {
+            currentChapter = chapterNum;
+            createChapterTabs();
+            // Load first level of chapter
+            const chapterData = chapters[chapterNum - 1];
+            loadLevel(chapterData.start);
+            createLevelNav();
+        }
+
+        // Create level navigation dots
+        function createLevelNav() {
+            const nav = document.getElementById('levelNav');
+            nav.innerHTML = '';
+
+            // Only show levels for current chapter
+            const chapterData = chapters[currentChapter - 1];
+
+            for (let i = chapterData.start; i <= chapterData.end; i++) {
+                const mol = molecules[i];
+                const levelNum = i - chapterData.start + 1;
+                const dot = document.createElement('div');
+                dot.className = 'level-dot' + (i === currentLevel ? ' active' : '') +
+                               (completedLevels.includes(i) ? ' completed' : '');
+                dot.textContent = levelNum;
+                dot.onclick = () => loadLevel(i);
+                dot.title = mol.name;
+                nav.appendChild(dot);
+            }
+        }
+
+        // Load a level
+        function loadLevel(levelIndex) {
+            currentLevel = levelIndex;
+            const mol = molecules[currentLevel];
+            currentChapter = mol.chapter;
+
+            // Update chapter tabs
+            createChapterTabs();
+
+            // Update target display
+            const chapterData = chapters[currentChapter - 1];
+            document.getElementById('targetLabel').textContent = `Poglavlje ${currentChapter}: ${chapterData.name}`;
+            document.getElementById('targetFormula').textContent = mol.formula + ' - ' + mol.name;
+
+            // Update level nav
+            createLevelNav();
+
+            // Create element jars
+            createElementJars(mol.elements);
+
+            // Create reaction slots
+            maxSlots = mol.ingredients.length;
+            createReactionSlots(maxSlots);
+
+            currentSlots = new Array(maxSlots).fill(null);
+        }
+
+        // Create element jars on shelf
+        function createElementJars(elementIds) {
+            const container = document.getElementById('elementJars');
+            container.innerHTML = '';
+
+            elementIds.forEach(elemId => {
+                const elem = elements[elemId];
+                const jar = document.createElement('div');
+                jar.className = `element-jar jar-${elemId}`;
+                jar.onclick = () => addElement(elemId);
+                jar.innerHTML = `
+                    <div class="jar-lid"></div>
+                    <div class="jar-glass">
+                        <div class="jar-contents"></div>
+                        <div class="jar-symbol">${elem.symbol}</div>
+                    </div>
+                    <div class="jar-label">${elem.name}</div>
+                `;
+                container.appendChild(jar);
+            });
+        }
+
+        // Create reaction slots
+        function createReactionSlots(count) {
+            const container = document.getElementById('reactionArea');
+            container.innerHTML = '';
+
+            for (let i = 0; i < count; i++) {
+                if (i > 0) {
+                    const plus = document.createElement('span');
+                    plus.className = 'plus-sign';
+                    plus.textContent = '+';
+                    container.appendChild(plus);
+                }
+
+                const slot = document.createElement('div');
+                slot.className = 'reaction-slot';
+                slot.dataset.index = i;
+                slot.onclick = () => removeFromSlot(i);
+                container.appendChild(slot);
+            }
+
+            const equals = document.createElement('span');
+            equals.className = 'equals-sign';
+            equals.textContent = '=';
+            container.appendChild(equals);
+
+            const result = document.createElement('div');
+            result.className = 'result-slot';
+            result.id = 'resultSlot';
+            result.innerHTML = '<span style="color: rgba(255,255,255,0.3); font-size: 3rem;">?</span>';
+            container.appendChild(result);
+        }
+
+        // Add element to reaction
+        function addElement(elementId) {
+            // Find first empty slot
+            const emptyIndex = currentSlots.findIndex(s => s === null);
+            if (emptyIndex === -1) return; // No empty slots
+
+            currentSlots[emptyIndex] = elementId;
+            updateSlotVisual(emptyIndex, elementId);
+
+            // Create particles
+            createParticles(event.clientX, event.clientY);
+        }
+
+        // Update slot visual
+        function updateSlotVisual(index, elementId) {
+            const slots = document.querySelectorAll('.reaction-slot');
+            const slot = slots[index];
+            const elem = elements[elementId];
+
+            slot.classList.add('filled');
+            slot.innerHTML = `
+                <div class="slot-atom ${elem.color}">
+                    <span class="symbol">${elem.symbol}</span>
+                    <div class="electron-ring ring1">
+                        <div class="electron" style="top: -4px; left: 50%;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Remove from slot
+        function removeFromSlot(index) {
+            if (currentSlots[index] === null) return;
+
+            currentSlots[index] = null;
+            const slots = document.querySelectorAll('.reaction-slot');
+            slots[index].classList.remove('filled');
+            slots[index].innerHTML = '';
+        }
+
+        // Clear all reaction slots
+        function clearReaction() {
+            currentSlots = new Array(maxSlots).fill(null);
+            document.querySelectorAll('.reaction-slot').forEach(slot => {
+                slot.classList.remove('filled');
+                slot.innerHTML = '';
+            });
+            document.getElementById('resultSlot').innerHTML =
+                '<span style="color: rgba(255,255,255,0.3); font-size: 3rem;">?</span>';
+            document.getElementById('resultSlot').classList.remove('success');
+        }
+
+        // Start reaction
+        function startReaction() {
+            const mol = molecules[currentLevel];
+            const required = [...mol.ingredients].sort();
+            const submitted = currentSlots.filter(s => s !== null).sort();
+
+            // Check if correct
+            const isCorrect = required.length === submitted.length &&
+                required.every((val, idx) => val === submitted[idx]);
+
+            if (isCorrect) {
+                showReactionSuccess(mol);
+            } else {
+                showReactionFail();
+            }
+        }
+
+        // Show successful reaction
+        function showReactionSuccess(mol) {
+            // Show result in slot first
+            const resultSlot = document.getElementById('resultSlot');
+            resultSlot.classList.add('success');
+            resultSlot.innerHTML = `
+                <div class="result-molecule">
+                    <div class="molecule-visual">${mol.emoji}</div>
+                    <div class="molecule-name">${mol.formula}</div>
+                </div>
+            `;
+
+            // Calculate stars (simplified - all 3 for now)
+            const stars = 3;
+            totalStars += stars;
+            document.getElementById('totalStars').textContent = totalStars;
+
+            // Mark level complete
+            if (!completedLevels.includes(currentLevel)) {
+                completedLevels.push(currentLevel);
+            }
+            createLevelNav();
+
+            // Show overlay after delay
+            setTimeout(() => {
+                document.getElementById('reactionVisual').textContent = mol.emoji;
+                document.getElementById('reactionEquation').textContent = mol.equation;
+                document.getElementById('reactionName').textContent = mol.name + '!';
+                document.getElementById('reactionFact').textContent = mol.funFact;
+
+                // Animate stars
+                document.querySelectorAll('.reaction-stars .star').forEach((star, i) => {
+                    star.classList.remove('earned');
+                    setTimeout(() => {
+                        if (i < stars) star.classList.add('earned');
+                    }, 300 + i * 300);
+                });
+
+                document.getElementById('reactionOverlay').classList.add('active');
+                createCelebrationParticles();
+            }, 800);
+        }
+
+        // Show failed reaction
+        function showReactionFail() {
+            const reactionArea = document.getElementById('reactionArea');
+            reactionArea.classList.add('shake');
+            setTimeout(() => reactionArea.classList.remove('shake'), 300);
+
+            // Flash result slot red
+            const resultSlot = document.getElementById('resultSlot');
+            resultSlot.style.borderColor = '#e74c3c';
+            resultSlot.innerHTML = '<span style="color: #e74c3c; font-size: 2rem;">❌ Probaj ponovo!</span>';
+            setTimeout(() => {
+                resultSlot.style.borderColor = '';
+                resultSlot.innerHTML = '<span style="color: rgba(255,255,255,0.3); font-size: 3rem;">?</span>';
+            }, 1500);
+        }
+
+        // Continue to next level
+        function continueGame() {
+            document.getElementById('reactionOverlay').classList.remove('active');
+            clearReaction();
+
+            if (currentLevel < molecules.length - 1) {
+                loadLevel(currentLevel + 1);
+            } else {
+                // Game complete - go back to first
+                loadLevel(0);
+            }
+        }
+
+        // Create particles effect
+        function createParticles(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
+                particle.textContent = ['✨', '⚡', '💫', '🔮'][Math.floor(Math.random() * 4)];
+                particle.style.fontSize = (Math.random() * 10 + 15) + 'px';
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        // Create celebration particles
+        function createCelebrationParticles() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * window.innerWidth + 'px';
+                    particle.style.top = window.innerHeight + 'px';
+                    particle.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+                    particle.style.setProperty('--ty', -window.innerHeight + 'px');
+                    particle.textContent = ['🎉', '⭐', '🌟', '✨', '🎊', '💫'][Math.floor(Math.random() * 6)];
+                    particle.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    particle.style.animationDuration = (Math.random() * 1 + 1) + 's';
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 2000);
+                }, i * 50);
+            }
+        }
+
+        // Enter the lab
+        function enterLab() {
+            const character = document.getElementById('character');
+            const bubble = document.getElementById('speechBubble');
+
+            // Hide speech bubble
+            bubble.style.display = 'none';
+
+            // Walk to lab
+            character.querySelector('.character-body').classList.add('char-walking');
+            character.style.left = '50%';
+            character.style.transform = 'translateX(-50%)';
+
+            setTimeout(() => {
+                document.getElementById('introScene').classList.remove('active');
+                document.getElementById('labScene').classList.add('active');
+            }, 600);
+        }
+
+        // Go back to intro
+        function goToIntro() {
+            document.getElementById('labScene').classList.remove('active');
+            document.getElementById('introScene').classList.add('active');
+
+            const character = document.getElementById('character');
+            character.style.left = '100px';
+            character.style.transform = '';
+            character.querySelector('.character-body').classList.remove('char-walking');
+            document.getElementById('speechBubble').style.display = 'block';
+        }
+
+        // Start the game
+        init();
+    </script>
+</body>
+</html>

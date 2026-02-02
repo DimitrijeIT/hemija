@@ -1,0 +1,103 @@
+{
+	"c3dtg": true,
+	"name": "eDataLoader",
+	"events": [
+		{
+			"eventType": "comment",
+			"text": "=== DATA LOADER EVENT SHEET ===\nLoads JSON data files on startup"
+		},
+		{
+			"eventType": "include",
+			"includeSheet": "eGlobal"
+		},
+		{
+			"eventType": "block",
+			"conditions": [
+				{
+					"id": "on-start-of-layout",
+					"objectClass": "System"
+				}
+			],
+			"actions": [
+				{
+					"id": "request",
+					"objectClass": "AJAX",
+					"parameters": {
+						"tag": "\"elements\"",
+						"url": "\"elements.json\""
+					}
+				},
+				{
+					"id": "request",
+					"objectClass": "AJAX",
+					"parameters": {
+						"tag": "\"molecules\"",
+						"url": "\"molecules.json\""
+					}
+				},
+				{
+					"id": "request",
+					"objectClass": "AJAX",
+					"parameters": {
+						"tag": "\"chapters\"",
+						"url": "\"chapters.json\""
+					}
+				},
+				{
+					"id": "request",
+					"objectClass": "AJAX",
+					"parameters": {
+						"tag": "\"strings\"",
+						"url": "\"strings_sr.json\""
+					}
+				}
+			]
+		},
+		{
+			"eventType": "block",
+			"conditions": [
+				{
+					"id": "on-completed",
+					"objectClass": "AJAX",
+					"parameters": {
+						"tag": "\"elements\""
+					}
+				}
+			],
+			"actions": [
+				{
+					"id": "parse",
+					"objectClass": "GameData",
+					"parameters": {
+						"json": "AJAX.LastData"
+					}
+				}
+			]
+		},
+		{
+			"eventType": "block",
+			"conditions": [
+				{
+					"id": "on-completed",
+					"objectClass": "AJAX",
+					"parameters": {
+						"tag": "\"molecules\""
+					}
+				}
+			],
+			"actions": [
+				{
+					"id": "parse",
+					"objectClass": "GameData",
+					"parameters": {
+						"json": "AJAX.LastData"
+					}
+				}
+			]
+		},
+		{
+			"eventType": "comment",
+			"text": "After all data loaded, check for saved progress or go to age gate"
+		}
+	]
+}

@@ -1,0 +1,259 @@
+{
+	"projectFormatVersion": 1,
+	"savedWithRelease": 38900,
+	"name": "HemiLab",
+	"runtime": "c3",
+	"useWorker": "auto",
+	"bundleAddons": false,
+	"usedAddons": [
+		{ "type": "plugin", "id": "Audio", "name": "Audio", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Browser", "name": "Browser", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Json", "name": "JSON", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Keyboard", "name": "Keyboard", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "LocalStorage", "name": "Local storage", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Mouse", "name": "Mouse", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Sprite", "name": "Sprite", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Text", "name": "Text", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "TiledBg", "name": "Tiled Background", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Touch", "name": "Touch", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "AJAX", "name": "AJAX", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Dictionary", "name": "Dictionary", "author": "Scirra", "bundled": false },
+		{ "type": "plugin", "id": "Array", "name": "Array", "author": "Scirra", "bundled": false },
+		{ "type": "behavior", "id": "DragnDrop", "name": "Drag & Drop", "author": "Scirra", "bundled": false },
+		{ "type": "behavior", "id": "Fade", "name": "Fade", "author": "Scirra", "bundled": false },
+		{ "type": "behavior", "id": "Tween", "name": "Tween", "author": "Scirra", "bundled": false },
+		{ "type": "behavior", "id": "Sin", "name": "Sine", "author": "Scirra", "bundled": false }
+	],
+	"uniqueId": "hemilab2024",
+	"objectTypes": {
+		"items": [],
+		"subfolders": [
+			{
+				"items": [
+					"Keyboard",
+					"Mouse",
+					"Touch",
+					"Audio",
+					"AJAX",
+					"Browser",
+					"LocalStorage",
+					"JSON",
+					"GameData",
+					"PlayerProgress"
+				],
+				"subfolders": [],
+				"name": "System"
+			},
+			{
+				"items": [
+					"ElementAtom",
+					"ElementSource",
+					"WorkspaceSlot",
+					"BondLine",
+					"ResultMolecule"
+				],
+				"subfolders": [],
+				"name": "Gameplay"
+			},
+			{
+				"items": [
+					"TxtTitle",
+					"TxtFormula",
+					"TxtTimer",
+					"TxtScore",
+					"TxtHint",
+					"TxtStars",
+					"TxtCoins",
+					"BtnPrimary",
+					"BtnSecondary",
+					"Panel",
+					"Star",
+					"Coin"
+				],
+				"subfolders": [],
+				"name": "UI"
+			},
+			{
+				"items": [
+					"Background",
+					"LabBackground",
+					"Workbench",
+					"Shelf"
+				],
+				"subfolders": [],
+				"name": "Backgrounds"
+			},
+			{
+				"items": [
+					"Character",
+					"SpeechBubble"
+				],
+				"subfolders": [],
+				"name": "Character"
+			}
+		]
+	},
+	"autosaveData": null,
+	"containers": [],
+	"families": {
+		"items": [],
+		"subfolders": []
+	},
+	"layouts": {
+		"items": [
+			"Splash",
+			"AgeGate",
+			"MainMenu",
+			"ChapterSelect",
+			"LevelSelect",
+			"Gameplay",
+			"LevelComplete",
+			"Laboratory",
+			"Settings"
+		],
+		"subfolders": []
+	},
+	"eventSheets": {
+		"items": [
+			"eGlobal",
+			"eDataLoader",
+			"eSaveLoad",
+			"eCOPPA",
+			"eMoleculeBuilder",
+			"eUI",
+			"eAudio",
+			"eLaboratory"
+		],
+		"subfolders": []
+	},
+	"rootFileFolders": {
+		"script": {
+			"items": [],
+			"subfolders": []
+		},
+		"sound": {
+			"items": [],
+			"subfolders": []
+		},
+		"music": {
+			"items": [],
+			"subfolders": []
+		},
+		"video": {
+			"items": [],
+			"subfolders": []
+		},
+		"font": {
+			"items": [],
+			"subfolders": []
+		},
+		"icon": {
+			"items": [
+				{
+					"name": "icon-16.png",
+					"type": "image/png",
+					"sid": 100,
+					"icon-info": { "purpose": "app-icon" }
+				},
+				{
+					"name": "icon-32.png",
+					"type": "image/png",
+					"sid": 101,
+					"icon-info": { "purpose": "app-icon" }
+				},
+				{
+					"name": "icon-64.png",
+					"type": "image/png",
+					"sid": 102,
+					"icon-info": { "purpose": "app-icon" }
+				},
+				{
+					"name": "icon-128.png",
+					"type": "image/png",
+					"sid": 103,
+					"icon-info": { "purpose": "app-icon" }
+				},
+				{
+					"name": "icon-256.png",
+					"type": "image/png",
+					"sid": 104,
+					"icon-info": { "purpose": "app-icon" }
+				},
+				{
+					"name": "icon-512.png",
+					"type": "image/png",
+					"sid": 105,
+					"icon-info": { "purpose": "app-icon" }
+				},
+				{
+					"name": "loading-logo.png",
+					"type": "image/png",
+					"sid": 106,
+					"icon-info": { "purpose": "loading-logo" }
+				}
+			],
+			"subfolders": []
+		},
+		"general": {
+			"items": [
+				{
+					"name": "elements.json",
+					"type": "application/json",
+					"sid": 200
+				},
+				{
+					"name": "molecules.json",
+					"type": "application/json",
+					"sid": 201
+				},
+				{
+					"name": "chapters.json",
+					"type": "application/json",
+					"sid": 202
+				},
+				{
+					"name": "strings_sr.json",
+					"type": "application/json",
+					"sid": 203
+				}
+			],
+			"subfolders": []
+		}
+	},
+	"timelines": {
+		"items": [],
+		"subfolders": []
+	},
+	"flowcharts": {
+		"items": [],
+		"subfolders": []
+	},
+	"properties": {
+		"description": "Educational chemistry game for Serbian students",
+		"version": "1.0.0.0",
+		"author": "HemiLab Team",
+		"authorEmail": "",
+		"website": "",
+		"backgroundColorRgb": [26, 26, 46],
+		"splashColor": [26, 26, 46],
+		"useThemeColor": false,
+		"themeColorRgb": [26, 26, 46],
+		"orientations": "landscape",
+		"webgpu": "auto",
+		"gpuPreference": "high-performance",
+		"scriptsType": "module",
+		"framerateMode": "vsync",
+		"sampling": "trilinear",
+		"downscaling": "medium",
+		"maxSpriteSheetSize": 4096,
+		"loaderStyle": "progress-logo",
+		"preloadSounds": true,
+		"cordovaiOSScheme": "app",
+		"cordovaAndroidScheme": "https",
+		"exportFileStructure": "folders",
+		"uidAllocationMode": "increment"
+	},
+	"viewportWidth": 1280,
+	"viewportHeight": 720,
+	"firstLayout": "Splash"
+}

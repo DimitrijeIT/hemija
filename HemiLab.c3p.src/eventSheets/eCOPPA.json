@@ -1,0 +1,24 @@
+{
+	"c3dtg": true,
+	"name": "eCOPPA",
+	"events": [
+		{"eventType": "comment", "text": "=== COPPA COMPLIANCE ==="},
+		{"eventType": "include", "includeSheet": "eGlobal"},
+		{
+			"eventType": "comment",
+			"text": "Age Gate - Under 13 button sets COPPAMode=true"
+		},
+		{
+			"eventType": "comment",
+			"text": "Age Gate - 13+ button sets COPPAMode=false"
+		},
+		{
+			"eventType": "comment",
+			"text": "Parental Gate - Generate random math problem"
+		},
+		{
+			"eventType": "comment",
+			"text": "Parental Gate - Validate answer before allowing action"
+		}
+	]
+}

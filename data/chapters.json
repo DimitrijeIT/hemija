@@ -1,0 +1,142 @@
+{
+  "version": "1.0.0",
+  "chapters": [
+    {
+      "id": 1,
+      "title_sr": "Osnovni elementi",
+      "description_sr": "Upoznaj vodonik, kiseonik i ugljenik - građevne blokove sveta!",
+      "icon": "chapter1_icon",
+      "background": "bg_chapter1",
+      "unlock_requirement": null,
+      "elements_introduced": ["H", "O", "C", "N", "Na", "Cl"],
+      "levels": [
+        {
+          "level_number": 1,
+          "molecule_id": "h2",
+          "stars_to_unlock": 0,
+          "tutorial": true
+        },
+        {
+          "level_number": 2,
+          "molecule_id": "o2",
+          "stars_to_unlock": 0,
+          "tutorial": false
+        },
+        {
+          "level_number": 3,
+          "molecule_id": "h2o",
+          "stars_to_unlock": 2,
+          "tutorial": false
+        },
+        {
+          "level_number": 4,
+          "molecule_id": "co2",
+          "stars_to_unlock": 4,
+          "tutorial": false
+        },
+        {
+          "level_number": 5,
+          "molecule_id": "n2",
+          "stars_to_unlock": 6,
+          "tutorial": false
+        },
+        {
+          "level_number": 6,
+          "molecule_id": "nacl",
+          "stars_to_unlock": 8,
+          "tutorial": false
+        },
+        {
+          "level_number": 7,
+          "molecule_id": "hcl",
+          "stars_to_unlock": 10,
+          "tutorial": false
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title_sr": "Hemijske reakcije",
+      "description_sr": "Otkrij složenije molekule i nauči kako elementi reaguju!",
+      "icon": "chapter2_icon",
+      "background": "bg_chapter2",
+      "unlock_requirement": {
+        "chapter_id": 1,
+        "min_stars": 12
+      },
+      "elements_introduced": ["K", "Ca", "S", "P", "Mg", "Fe"],
+      "levels": [
+        {
+          "level_number": 1,
+          "molecule_id": "ch4",
+          "stars_to_unlock": 0,
+          "tutorial": false
+        },
+        {
+          "level_number": 2,
+          "molecule_id": "nh3",
+          "stars_to_unlock": 2,
+          "tutorial": false
+        },
+        {
+          "level_number": 3,
+          "molecule_id": "h2s",
+          "stars_to_unlock": 4,
+          "tutorial": false
+        },
+        {
+          "level_number": 4,
+          "molecule_id": "cacl2",
+          "stars_to_unlock": 6,
+          "tutorial": false
+        },
+        {
+          "level_number": 5,
+          "molecule_id": "mgo",
+          "stars_to_unlock": 8,
+          "tutorial": false
+        },
+        {
+          "level_number": 6,
+          "molecule_id": "kcl",
+          "stars_to_unlock": 10,
+          "tutorial": false
+        },
+        {
+          "level_number": 7,
+          "molecule_id": "fe2o3",
+          "stars_to_unlock": 12,
+          "tutorial": false
+        },
+        {
+          "level_number": 8,
+          "molecule_id": "cao",
+          "stars_to_unlock": 14,
+          "tutorial": false
+        }
+      ]
+    }
+  ],
+  "star_rating": {
+    "three_stars": {
+      "time_bonus_percent": 50,
+      "no_hints_used": true
+    },
+    "two_stars": {
+      "time_bonus_percent": 25,
+      "max_hints": 1
+    },
+    "one_star": {
+      "completed": true
+    }
+  },
+  "rewards": {
+    "level_complete": {
+      "coins_per_star": 10,
+      "first_time_bonus": 25
+    },
+    "chapter_complete": {
+      "coins_bonus": 100
+    }
+  }
+}

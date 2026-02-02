@@ -1,0 +1,38 @@
+{
+	"c3dtg": true,
+	"name": "eMoleculeBuilder",
+	"events": [
+		{"eventType": "comment", "text": "=== MOLECULE BUILDER - Core Gameplay ==="},
+		{"eventType": "include", "includeSheet": "eGlobal"},
+		{"eventType": "include", "includeSheet": "eUI"},
+		{"eventType": "include", "includeSheet": "eAudio"},
+		{
+			"eventType": "comment",
+			"text": "On Layout Start - Setup level from current chapter/level variables"
+		},
+		{
+			"eventType": "comment",
+			"text": "Element Source Touch - Create draggable atom at touch position"
+		},
+		{
+			"eventType": "comment",
+			"text": "Atom Drag End - Snap to slot if close enough, else destroy"
+		},
+		{
+			"eventType": "comment",
+			"text": "Timer Tick - Decrement TimeRemaining every second"
+		},
+		{
+			"eventType": "comment",
+			"text": "Check Button - Validate workspace elements against molecule recipe"
+		},
+		{
+			"eventType": "comment", 
+			"text": "Success - Calculate stars, save progress, show results"
+		},
+		{
+			"eventType": "comment",
+			"text": "Hint Button - Show hint text, deduct from HintsRemaining"
+		}
+	]
+}

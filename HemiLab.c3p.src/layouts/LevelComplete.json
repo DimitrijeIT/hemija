@@ -1,0 +1,15 @@
+{
+	"c3dtg": true,
+	"name": "LevelComplete",
+	"width": 1280,
+	"height": 720,
+	"eventSheetName": "eUI",
+	"scrollX": 640,
+	"scrollY": 360,
+	"scale": 1,
+	"layers": [
+		{"name": "Background", "initialVisible": true, "transparent": false, "backgroundColor": [26, 26, 46], "zElevation": 0, "instances": []},
+		{"name": "Results", "initialVisible": true, "transparent": true, "zElevation": 50, "instances": []},
+		{"name": "UI", "initialVisible": true, "transparent": true, "zElevation": 100, "instances": []}
+	]
+}
