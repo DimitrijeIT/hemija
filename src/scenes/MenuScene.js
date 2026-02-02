@@ -5,17 +5,29 @@ import { Localization } from '../core/Localization.js';
 import { ProgressData } from '../data/ProgressData.js';
 import { Button } from '../ui/Button.js';
 import { drawMenuBackground } from '../graphics/BackgroundGraphics.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class MenuScene extends Scene {
   onEnter() {
     super.onEnter();
+    this._buildUI();
+  }
+
+  onResize() {
+    this.removeChildren();
+    this._buildUI();
+  }
+
+  _buildUI() {
     const loc = Localization.getInstance();
     const progress = ProgressData.getInstance();
+    const W = this.screenWidth;
 
     drawMenuBackground(this);
 
-    // Left side: branding
+    // Left side: branding (proportional to screen width)
+    const brandX = W * 0.32;
+
     const title = new Text({
       text: loc.get('app.name'),
       style: {
@@ -27,7 +39,7 @@ export class MenuScene extends Scene {
       }
     });
     title.anchor.set(0.5);
-    title.position.set(400, 200);
+    title.position.set(brandX, 200);
     this.addChild(title);
 
     const tagline = new Text({
@@ -40,7 +52,7 @@ export class MenuScene extends Scene {
       }
     });
     tagline.anchor.set(0.5);
-    tagline.position.set(400, 260);
+    tagline.position.set(brandX, 260);
     this.addChild(tagline);
 
     // Flask icon decoration
@@ -51,7 +63,7 @@ export class MenuScene extends Scene {
     flask.fill({ color: COLORS.PRIMARY, alpha: 0.5 });
     flask.circle(0, -15, 7);
     flask.fill({ color: COLORS.PRIMARY_LIGHT, alpha: 0.6 });
-    flask.position.set(400, 130);
+    flask.position.set(brandX, 130);
     this.addChild(flask);
 
     // Stats row
@@ -59,23 +71,23 @@ export class MenuScene extends Scene {
     const totalCoins = progress.getTotalCoins();
 
     const starText = new Text({
-      text: `★ ${totalStars}`,
+      text: `\u2605 ${totalStars}`,
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.HEADING_SIZE, fill: COLORS.GOLD }
     });
     starText.anchor.set(0.5);
-    starText.position.set(350, 320);
+    starText.position.set(brandX - 50, 320);
     this.addChild(starText);
 
     const coinText = new Text({
-      text: `● ${totalCoins}`,
+      text: `\u25CF ${totalCoins}`,
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.BODY_SIZE, fill: COLORS.WARNING }
     });
     coinText.anchor.set(0.5);
-    coinText.position.set(460, 325);
+    coinText.position.set(brandX + 60, 325);
     this.addChild(coinText);
 
-    // Right side: buttons (vertically stacked)
-    const btnX = 830;
+    // Right side: buttons (anchored from right edge)
+    const btnX = W - 450;
     const btnW = 300;
     const btnH = 64;
     const btnGap = 20;

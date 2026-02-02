@@ -17,7 +17,7 @@ import { Button } from '../ui/Button.js';
 import { Toast } from '../ui/Toast.js';
 import { drawGameplayBackground } from '../graphics/BackgroundGraphics.js';
 import { formatFormula } from '../utils/formulaFormat.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class GameplayScene extends Scene {
   constructor() {
@@ -51,6 +51,7 @@ export class GameplayScene extends Scene {
   _buildUI() {
     const loc = Localization.getInstance();
     const gameData = GameData.getInstance();
+    const W = this.screenWidth;
 
     drawGameplayBackground(this);
 
@@ -71,7 +72,7 @@ export class GameplayScene extends Scene {
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.BODY_SIZE, fontWeight: 'bold', fill: COLORS.TEXT_WHITE }
     });
     titleText.anchor.set(0.5, 0);
-    titleText.position.set(DESIGN_WIDTH / 2, 8);
+    titleText.position.set(W / 2, 8);
     this.addChild(titleText);
 
     const nameText = new Text({
@@ -79,21 +80,21 @@ export class GameplayScene extends Scene {
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.SMALL_SIZE, fill: COLORS.TEXT_LIGHT }
     });
     nameText.anchor.set(0.5, 0);
-    nameText.position.set(DESIGN_WIDTH / 2, 34);
+    nameText.position.set(W / 2, 34);
     this.addChild(nameText);
 
     // Difficulty stars top right
     const diffText = new Text({
-      text: '★'.repeat(this._molecule.difficulty) + '☆'.repeat(3 - this._molecule.difficulty),
+      text: '\u2605'.repeat(this._molecule.difficulty) + '\u2606'.repeat(3 - this._molecule.difficulty),
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.SMALL_SIZE, fill: COLORS.GOLD }
     });
     diffText.anchor.set(1, 0);
-    diffText.position.set(DESIGN_WIDTH - 15, 12);
+    diffText.position.set(W - 15, 12);
     this.addChild(diffText);
 
     // Timer bar below top bar
     this._timer = new TimerBar({
-      width: DESIGN_WIDTH - 30,
+      width: W - 30,
       height: 18,
       totalTime: this._molecule.time_limit_seconds
     });
@@ -116,9 +117,11 @@ export class GameplayScene extends Scene {
     this._shelf.position.set(leftX, contentY);
     this.addChild(this._shelf);
 
-    // Reaction workspace (right side, wider)
+    // Reaction workspace (right side, wider - dynamic)
+    const rightW = W - rightX - 15;
     this._workspace = new ReactionWorkspace({
       molecule: this._molecule,
+      width: rightW,
       onSlotTap: (slot) => this._onSlotTap(slot)
     });
     this._workspace.position.set(rightX, contentY);
@@ -132,12 +135,12 @@ export class GameplayScene extends Scene {
         fontSize: FONT.SMALL_SIZE,
         fill: COLORS.WARNING,
         wordWrap: true,
-        wordWrapWidth: DESIGN_WIDTH - rightX - 40,
+        wordWrapWidth: rightW - 40,
         align: 'center'
       }
     });
     this._hintTextDisplay.anchor.set(0.5, 0);
-    this._hintTextDisplay.position.set(rightX + (DESIGN_WIDTH - rightX) / 2 - 15, 320);
+    this._hintTextDisplay.position.set(rightX + rightW / 2, 320);
     this.addChild(this._hintTextDisplay);
 
     // ---- Bottom buttons row ----
@@ -175,7 +178,7 @@ export class GameplayScene extends Scene {
       fontSize: 24,
       onClick: () => this._onSubmit()
     });
-    submitBtn.position.set(DESIGN_WIDTH - 295, btnY - 4);
+    submitBtn.position.set(W - 295, btnY - 4);
     this.addChild(submitBtn);
     this._submitBtn = submitBtn;
   }
@@ -247,12 +250,13 @@ export class GameplayScene extends Scene {
     this._submitted = true;
     this._timer.stop();
     AudioManager.getInstance().playSfx('success');
+    const W = this.screenWidth;
 
     this._workspace.showResult(this._molecule, this._workspace.getFilledElements());
 
     // Gold particles burst from workspace area
     const particles = new ParticleEffect({
-      x: DESIGN_WIDTH / 2 + 200,
+      x: W / 2 + 200,
       y: 250,
       color: COLORS.GOLD,
       count: 30,
@@ -263,7 +267,7 @@ export class GameplayScene extends Scene {
 
     // Success flash
     const flash = new Graphics();
-    flash.rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    flash.rect(0, 0, W, DESIGN_HEIGHT);
     flash.fill({ color: COLORS.SUCCESS, alpha: 0.15 });
     this.addChild(flash);
 
@@ -290,7 +294,7 @@ export class GameplayScene extends Scene {
       }
     });
     bravoText.anchor.set(0.5);
-    bravoText.position.set(DESIGN_WIDTH / 2, DESIGN_HEIGHT / 2);
+    bravoText.position.set(W / 2, DESIGN_HEIGHT / 2);
     bravoText.scale.set(0);
     this.addChild(bravoText);
 
@@ -341,6 +345,7 @@ export class GameplayScene extends Scene {
 
   _onFailure(reason) {
     const loc = Localization.getInstance();
+    const W = this.screenWidth;
     let message;
     if (reason === 'wrong_elements') message = loc.get('feedback.wrong_elements');
     else if (reason === 'wrong_count') message = loc.get('feedback.wrong_count');
@@ -350,7 +355,7 @@ export class GameplayScene extends Scene {
     this._workspace.shakeAll();
 
     const flash = new Graphics();
-    flash.rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    flash.rect(0, 0, W, DESIGN_HEIGHT);
     flash.fill({ color: COLORS.FAILURE, alpha: 0.12 });
     this.addChild(flash);
 
@@ -377,8 +382,9 @@ export class GameplayScene extends Scene {
 
   _showTimeUpOverlay() {
     const loc = Localization.getInstance();
+    const W = this.screenWidth;
     const overlay = new Graphics();
-    overlay.rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    overlay.rect(0, 0, W, DESIGN_HEIGHT);
     overlay.fill({ color: COLORS.OVERLAY, alpha: 0.7 });
     overlay.eventMode = 'static';
     this.addChild(overlay);
@@ -388,7 +394,7 @@ export class GameplayScene extends Scene {
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.TITLE_SIZE, fontWeight: 'bold', fill: COLORS.ACCENT }
     });
     title.anchor.set(0.5);
-    title.position.set(DESIGN_WIDTH / 2, DESIGN_HEIGHT / 2 - 60);
+    title.position.set(W / 2, DESIGN_HEIGHT / 2 - 60);
     this.addChild(title);
 
     const retryBtn = new Button({
@@ -398,7 +404,7 @@ export class GameplayScene extends Scene {
       color: COLORS.BUTTON_BLUE,
       onClick: () => SceneManager.getInstance().switchTo(SCENES.GAMEPLAY, { chapterId: this._chapterId, levelNumber: this._levelNumber })
     });
-    retryBtn.position.set(DESIGN_WIDTH / 2 - 250, DESIGN_HEIGHT / 2 + 10);
+    retryBtn.position.set(W / 2 - 250, DESIGN_HEIGHT / 2 + 10);
     this.addChild(retryBtn);
 
     const menuBtn = new Button({
@@ -408,7 +414,7 @@ export class GameplayScene extends Scene {
       color: COLORS.BUTTON_GRAY,
       onClick: () => SceneManager.getInstance().switchTo(SCENES.CHAPTER_SELECT, { chapter: this._chapterId })
     });
-    menuBtn.position.set(DESIGN_WIDTH / 2 + 10, DESIGN_HEIGHT / 2 + 10);
+    menuBtn.position.set(W / 2 + 10, DESIGN_HEIGHT / 2 + 10);
     this.addChild(menuBtn);
   }
 

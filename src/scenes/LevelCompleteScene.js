@@ -13,7 +13,7 @@ import { MoleculeStory } from '../gameplay/MoleculeStory.js';
 import { ConfettiEffect } from '../gameplay/ConfettiEffect.js';
 import { formatFormula } from '../utils/formulaFormat.js';
 import { drawMenuBackground } from '../graphics/BackgroundGraphics.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class LevelCompleteScene extends Scene {
   onEnter(params) {
@@ -22,6 +22,7 @@ export class LevelCompleteScene extends Scene {
     const loc = Localization.getInstance();
     const gameData = GameData.getInstance();
     const progress = ProgressData.getInstance();
+    const W = this.screenWidth;
 
     const coinsEarned = progress.saveLevelResult(chapterId, levelNumber, scoring.stars, scoring.totalScore);
 
@@ -31,19 +32,19 @@ export class LevelCompleteScene extends Scene {
     if (scoring.stars >= 2) {
       setTimeout(() => {
         if (this.destroyed) return;
-        this.addChild(new ConfettiEffect({ x: DESIGN_WIDTH / 2, y: 0, width: DESIGN_WIDTH, count: 80, duration: 4000 }));
+        this.addChild(new ConfettiEffect({ x: W / 2, y: 0, width: W, count: 80, duration: 4000 }));
       }, 400);
     }
     if (scoring.stars === 3) {
       setTimeout(() => {
         if (this.destroyed) return;
-        this.addChild(new ConfettiEffect({ x: DESIGN_WIDTH * 0.25, y: 0, width: 400, count: 40, duration: 3500 }));
-        this.addChild(new ConfettiEffect({ x: DESIGN_WIDTH * 0.75, y: 0, width: 400, count: 40, duration: 3500 }));
+        this.addChild(new ConfettiEffect({ x: W * 0.25, y: 0, width: 400, count: 40, duration: 3500 }));
+        this.addChild(new ConfettiEffect({ x: W * 0.75, y: 0, width: 400, count: 40, duration: 3500 }));
       }, 1000);
     }
 
     // ---- Left column: result info ----
-    const leftCx = 280;
+    const leftCx = W * 0.22;
 
     const title = new Text({
       text: loc.get('level_complete.title'),
@@ -129,10 +130,10 @@ export class LevelCompleteScene extends Scene {
     yRow += 10;
     this._addRow(panel, loc.get('level_complete.total_score'), `${scoring.totalScore}`, COLORS.GOLD, yRow, true);
     yRow += rowGap + 4;
-    this._addRow(panel, loc.get('level_complete.coins_earned'), `+${coinsEarned} ●`, COLORS.WARNING, yRow);
+    this._addRow(panel, loc.get('level_complete.coins_earned'), `+${coinsEarned} \u25CF`, COLORS.WARNING, yRow);
 
     // ---- Center column: Molecule Story Animation ----
-    const centerCx = 640;
+    const centerCx = W * 0.5;
     const storyAnim = new MoleculeStory(molecule.id, 340, 200);
     storyAnim.position.set(centerCx - 170, 40);
     this.addChild(storyAnim);
@@ -169,7 +170,7 @@ export class LevelCompleteScene extends Scene {
     setTimeout(animFact, 600);
 
     // ---- Right column: buttons ----
-    const rightCx = 1060;
+    const rightCx = W * 0.83;
     const chapter = gameData.getChapter(chapterId);
     const nextLevel = chapter.levels.find(l => l.level_number === levelNumber + 1);
     const hasNext = nextLevel && progress.isLevelUnlocked(chapterId, levelNumber + 1);
@@ -208,7 +209,7 @@ export class LevelCompleteScene extends Scene {
       const nextChapter = gameData.getChapter(chapterId + 1);
       if (nextChapter && progress.isChapterUnlocked(chapterId + 1)) {
         const nextChBtn = new Button({
-          label: `${loc.t(nextChapter.title_sr)} →`,
+          label: `${loc.t(nextChapter.title_sr)} \u2192`,
           width: btnW,
           height: 56,
           color: COLORS.BUTTON_GREEN,

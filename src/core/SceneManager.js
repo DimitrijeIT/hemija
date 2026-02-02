@@ -19,6 +19,11 @@ export class SceneManager {
 
   init(game) {
     this._game = game;
+    game._onResizeCallback = () => {
+      if (this._current && this._current._active) {
+        this._current.onResize();
+      }
+    };
     game.ticker.add((ticker) => {
       if (this._current && this._current._active) {
         this._current.update(ticker.deltaMS / 1000);

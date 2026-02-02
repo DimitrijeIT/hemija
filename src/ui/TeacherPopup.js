@@ -11,7 +11,8 @@ import { GameData } from '../data/GameData.js';
 import { ProgressData } from '../data/ProgressData.js';
 import { AudioManager } from '../core/AudioManager.js';
 import { formatFormula } from '../utils/formulaFormat.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { Game } from '../core/Game.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 /**
  * Fun teacher popup overlay that appears on top of GameplayScene
@@ -26,11 +27,12 @@ export class TeacherPopup extends Container {
     const loc = Localization.getInstance();
     const gameData = GameData.getInstance();
     const progress = ProgressData.getInstance();
+    const W = Game.getInstance().screenWidth;
     const coinsEarned = progress.saveLevelResult(chapterId, levelNumber, scoring.stars, scoring.totalScore);
 
     // Semi-transparent overlay
     const overlay = new Graphics();
-    overlay.rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    overlay.rect(0, 0, W, DESIGN_HEIGHT);
     overlay.fill({ color: 0x000000, alpha: 0.6 });
     overlay.eventMode = 'static';
     this.addChild(overlay);
@@ -100,13 +102,13 @@ export class TeacherPopup extends Container {
     // === Stars (top center, big and celebratory) ===
     const starDisplay = new StarDisplay({ count: scoring.stars, total: 3, size: 36, gap: 16 });
     const starWidth = 3 * (36 * 2 + 16) - 16;
-    starDisplay.position.set(DESIGN_WIDTH / 2 - starWidth / 2, 30);
+    starDisplay.position.set(W / 2 - starWidth / 2, 30);
     this.addChild(starDisplay);
     setTimeout(() => {
       if (this.destroyed) return;
       starDisplay.animateIn();
       if (scoring.stars >= 2) {
-        this.addChild(new ParticleEffect({ x: DESIGN_WIDTH / 2, y: 70, color: COLORS.GOLD, count: 25 }));
+        this.addChild(new ParticleEffect({ x: W / 2, y: 70, color: COLORS.GOLD, count: 25 }));
       }
     }, 500);
 
@@ -114,27 +116,27 @@ export class TeacherPopup extends Container {
     if (scoring.stars >= 2) {
       setTimeout(() => {
         if (this.destroyed) return;
-        this.addChild(new ConfettiEffect({ x: DESIGN_WIDTH / 2, y: 0, width: DESIGN_WIDTH, count: 70, duration: 4000 }));
+        this.addChild(new ConfettiEffect({ x: W / 2, y: 0, width: W, count: 70, duration: 4000 }));
       }, 300);
     }
     if (scoring.stars === 3) {
       setTimeout(() => {
         if (this.destroyed) return;
-        this.addChild(new ConfettiEffect({ x: DESIGN_WIDTH * 0.2, y: 0, width: 300, count: 30, duration: 3000 }));
-        this.addChild(new ConfettiEffect({ x: DESIGN_WIDTH * 0.8, y: 0, width: 300, count: 30, duration: 3000 }));
+        this.addChild(new ConfettiEffect({ x: W * 0.2, y: 0, width: 300, count: 30, duration: 3000 }));
+        this.addChild(new ConfettiEffect({ x: W * 0.8, y: 0, width: 300, count: 30, duration: 3000 }));
       }, 900);
     }
 
     // === Molecule Story (center-right) ===
     const story = new MoleculeStory(molecule.id, 320, 180);
-    story.position.set(DESIGN_WIDTH / 2 + 30, 85);
+    story.position.set(W / 2 + 30, 85);
     this.addChild(story);
 
     // === Score panel (compact, below story) ===
     const scorePanel = new Graphics();
     const spW = 320;
     const spH = 120;
-    const spX = DESIGN_WIDTH / 2 + 30;
+    const spX = W / 2 + 30;
     const spY = 280;
     scorePanel.roundRect(0, 0, spW, spH, 12);
     scorePanel.fill({ color: COLORS.BG_PANEL, alpha: 0.9 });
@@ -165,7 +167,7 @@ export class TeacherPopup extends Container {
     this._scoreRow(scorePanel, loc.get('level_complete.coins_earned'), `+${coinsEarned}`, COLORS.WARNING, rowY, spW);
 
     // Score panel slide in from right
-    scorePanel.x = DESIGN_WIDTH + 50;
+    scorePanel.x = W + 50;
     setTimeout(() => {
       if (this.destroyed) return;
       const slideStart = Date.now();
@@ -173,7 +175,7 @@ export class TeacherPopup extends Container {
         if (this.destroyed) return;
         const t = Math.min((Date.now() - slideStart) / 500, 1);
         const ease = 1 - Math.pow(1 - t, 3);
-        scorePanel.x = DESIGN_WIDTH + 50 - (DESIGN_WIDTH + 50 - spX) * ease;
+        scorePanel.x = W + 50 - (W + 50 - spX) * ease;
         if (t < 1) requestAnimationFrame(slidePanel);
       };
       slidePanel();
@@ -230,7 +232,7 @@ export class TeacherPopup extends Container {
     const hasNext = nextLevel && progress.isLevelUnlocked(chapterId, levelNumber + 1);
 
     const btnW = 220;
-    let btnX = DESIGN_WIDTH - btnW - 40;
+    let btnX = W - btnW - 40;
     let btnY = DESIGN_HEIGHT - 170;
 
     if (hasNext) {

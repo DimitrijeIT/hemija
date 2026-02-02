@@ -7,7 +7,7 @@ import { ProgressData } from '../data/ProgressData.js';
 import { Button } from '../ui/Button.js';
 import { drawMenuBackground } from '../graphics/BackgroundGraphics.js';
 import { drawStar } from '../graphics/UIGraphics.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class ChapterSelectScene extends Scene {
   constructor() {
@@ -21,11 +21,17 @@ export class ChapterSelectScene extends Scene {
     this._buildUI();
   }
 
+  onResize() {
+    this.removeChildren();
+    this._buildUI();
+  }
+
   _buildUI() {
     this.removeChildren();
     const loc = Localization.getInstance();
     const gameData = GameData.getInstance();
     const progress = ProgressData.getInstance();
+    const W = this.screenWidth;
 
     drawMenuBackground(this);
 
@@ -35,7 +41,7 @@ export class ChapterSelectScene extends Scene {
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.TITLE_SIZE, fontWeight: 'bold', fill: COLORS.TEXT_WHITE }
     });
     title.anchor.set(0.5);
-    title.position.set(DESIGN_WIDTH / 2, 35);
+    title.position.set(W / 2, 35);
     this.addChild(title);
 
     // Back button
@@ -55,7 +61,7 @@ export class ChapterSelectScene extends Scene {
     const tabWidth = 260;
     const tabGap = 16;
     const totalTabW = chapters.length * tabWidth + (chapters.length - 1) * tabGap;
-    const tabStartX = (DESIGN_WIDTH - totalTabW) / 2;
+    const tabStartX = (W - totalTabW) / 2;
 
     for (let i = 0; i < chapters.length; i++) {
       const ch = chapters[i];
@@ -76,7 +82,7 @@ export class ChapterSelectScene extends Scene {
       tab.addChild(tabLabel);
 
       if (!unlocked) {
-        const lockText = new Text({ text: '🔒', style: { fontSize: 16 } });
+        const lockText = new Text({ text: '\uD83D\uDD12', style: { fontSize: 16 } });
         lockText.anchor.set(0.5);
         lockText.position.set(tabWidth - 22, 25);
         tab.addChild(lockText);
@@ -97,20 +103,20 @@ export class ChapterSelectScene extends Scene {
 
     const descText = new Text({
       text: chapter.description_sr,
-      style: { fontFamily: FONT.FAMILY, fontSize: FONT.SMALL_SIZE, fill: COLORS.TEXT_LIGHT, wordWrap: true, wordWrapWidth: 800, align: 'center' }
+      style: { fontFamily: FONT.FAMILY, fontSize: FONT.SMALL_SIZE, fill: COLORS.TEXT_LIGHT, wordWrap: true, wordWrapWidth: Math.min(800, W - 100), align: 'center' }
     });
     descText.anchor.set(0.5, 0);
-    descText.position.set(DESIGN_WIDTH / 2, 140);
+    descText.position.set(W / 2, 140);
     this.addChild(descText);
 
     const chStars = progress.getChapterStars(chapter.id);
     const maxStars = chapter.levels.length * 3;
     const starText = new Text({
-      text: `★ ${chStars} / ${maxStars}`,
+      text: `\u2605 ${chStars} / ${maxStars}`,
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.BODY_SIZE, fill: COLORS.GOLD }
     });
     starText.anchor.set(0.5);
-    starText.position.set(DESIGN_WIDTH / 2, 170);
+    starText.position.set(W / 2, 170);
     this.addChild(starText);
 
     if (!chapterUnlocked) {
@@ -119,7 +125,7 @@ export class ChapterSelectScene extends Scene {
         style: { fontFamily: FONT.FAMILY, fontSize: FONT.HEADING_SIZE, fill: COLORS.ACCENT, align: 'center' }
       });
       lockMsg.anchor.set(0.5);
-      lockMsg.position.set(DESIGN_WIDTH / 2, DESIGN_HEIGHT / 2);
+      lockMsg.position.set(W / 2, DESIGN_HEIGHT / 2);
       this.addChild(lockMsg);
       return;
     }
@@ -131,9 +137,8 @@ export class ChapterSelectScene extends Scene {
     const dotH = 130;
     const gapX = 16;
     const gapY = 16;
-    const rows = Math.ceil(levels.length / cols);
     const gridW = cols * dotW + (cols - 1) * gapX;
-    const startX = (DESIGN_WIDTH - gridW) / 2;
+    const startX = (W - gridW) / 2;
     const startY = 210;
 
     for (let i = 0; i < levels.length; i++) {
@@ -178,7 +183,7 @@ export class ChapterSelectScene extends Scene {
 
         if (unlocked) {
           const nameText = new Text({
-            text: molecule.name_sr.length > 14 ? molecule.name_sr.substring(0, 13) + '…' : molecule.name_sr,
+            text: molecule.name_sr.length > 14 ? molecule.name_sr.substring(0, 13) + '\u2026' : molecule.name_sr,
             style: { fontFamily: FONT.FAMILY, fontSize: 12, fill: COLORS.TEXT_DIM }
           });
           nameText.anchor.set(0.5);
@@ -188,7 +193,7 @@ export class ChapterSelectScene extends Scene {
       }
 
       if (!unlocked) {
-        const lock = new Text({ text: '🔒', style: { fontSize: 14 } });
+        const lock = new Text({ text: '\uD83D\uDD12', style: { fontSize: 14 } });
         lock.anchor.set(0.5);
         lock.position.set(dotW / 2, 80);
         dot.addChild(lock);
@@ -204,7 +209,7 @@ export class ChapterSelectScene extends Scene {
         dot.addChild(starG);
       } else {
         const newDot = new Text({
-          text: '•',
+          text: '\u2022',
           style: { fontFamily: FONT.FAMILY, fontSize: 20, fill: COLORS.TEXT_DIM }
         });
         newDot.anchor.set(0.5);

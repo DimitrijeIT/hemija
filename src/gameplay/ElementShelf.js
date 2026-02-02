@@ -1,6 +1,6 @@
 import { Container, Graphics, Text } from 'pixi.js';
 import { ElementJar } from './ElementJar.js';
-import { COLORS, FONT, DESIGN_WIDTH } from '../core/Constants.js';
+import { COLORS, FONT } from '../core/Constants.js';
 import { Localization } from '../core/Localization.js';
 
 export class ElementShelf extends Container {

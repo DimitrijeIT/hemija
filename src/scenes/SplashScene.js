@@ -5,7 +5,7 @@ import { Localization } from '../core/Localization.js';
 import { GameData } from '../data/GameData.js';
 import { SaveManager } from '../core/SaveManager.js';
 import { SceneManager } from '../core/SceneManager.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class SplashScene extends Scene {
   constructor() {
@@ -17,9 +17,11 @@ export class SplashScene extends Scene {
 
   onEnter() {
     super.onEnter();
+    const W = this.screenWidth;
+    const H = DESIGN_HEIGHT;
 
     const bg = new Graphics();
-    bg.rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    bg.rect(0, 0, W, H);
     bg.fill({ color: COLORS.BG_DARK });
     this.addChild(bg);
 
@@ -34,11 +36,11 @@ export class SplashScene extends Scene {
       }
     });
     title.anchor.set(0.5);
-    title.position.set(DESIGN_WIDTH / 2, DESIGN_HEIGHT / 2 - 80);
+    title.position.set(W / 2, H / 2 - 80);
     this.addChild(title);
 
     const tagline = new Text({
-      text: 'Открој свет хемије!',
+      text: '\u041E\u0442\u043A\u0440\u043E\u0458 \u0441\u0432\u0435\u0442 \u0445\u0435\u043C\u0438\u0458\u0435!',
       style: {
         fontFamily: FONT.FAMILY,
         fontSize: FONT.BODY_SIZE,
@@ -47,13 +49,13 @@ export class SplashScene extends Scene {
       }
     });
     tagline.anchor.set(0.5);
-    tagline.position.set(DESIGN_WIDTH / 2, DESIGN_HEIGHT / 2 - 25);
+    tagline.position.set(W / 2, H / 2 - 25);
     this.addChild(tagline);
 
     const barWidth = 360;
     const barHeight = 16;
-    const barX = (DESIGN_WIDTH - barWidth) / 2;
-    const barY = DESIGN_HEIGHT / 2 + 30;
+    const barX = (W - barWidth) / 2;
+    const barY = H / 2 + 30;
 
     this._progressBar = new Graphics();
     this._progressBar.roundRect(barX, barY, barWidth, barHeight, 8);
@@ -65,7 +67,7 @@ export class SplashScene extends Scene {
     this.addChild(this._progressFill);
 
     this._statusText = new Text({
-      text: 'Учитавање...',
+      text: '\u0423\u0447\u0438\u0442\u0430\u0432\u0430\u045A\u0435...',
       style: {
         fontFamily: FONT.FAMILY,
         fontSize: FONT.SMALL_SIZE,
@@ -74,7 +76,7 @@ export class SplashScene extends Scene {
       }
     });
     this._statusText.anchor.set(0.5);
-    this._statusText.position.set(DESIGN_WIDTH / 2, barY + 35);
+    this._statusText.position.set(W / 2, barY + 35);
     this.addChild(this._statusText);
 
     this._loadAssets(barWidth, barHeight);

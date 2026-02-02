@@ -1,16 +1,17 @@
 import { Container, Graphics, Text } from 'pixi.js';
 import { ReactionSlot } from './ReactionSlot.js';
-import { COLORS, FONT, DESIGN_WIDTH } from '../core/Constants.js';
+import { COLORS, FONT } from '../core/Constants.js';
+import { Game } from '../core/Game.js';
 import { Localization } from '../core/Localization.js';
 
 export class ReactionWorkspace extends Container {
-  constructor({ molecule, onSlotTap }) {
+  constructor({ molecule, width, onSlotTap }) {
     super();
     this._slots = [];
     this._molecule = molecule;
 
     const totalAtoms = molecule.ingredients.reduce((sum, ing) => sum + ing.count, 0);
-    const areaWidth = DESIGN_WIDTH - 370;
+    const areaWidth = width || (Game.getInstance().screenWidth - 370);
 
     const loc = Localization.getInstance();
     const label = new Text({

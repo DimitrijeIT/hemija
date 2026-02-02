@@ -1,5 +1,6 @@
 import { Container, Text, Graphics } from 'pixi.js';
-import { COLORS, FONT, DESIGN_WIDTH } from '../core/Constants.js';
+import { COLORS, FONT } from '../core/Constants.js';
+import { Game } from '../core/Game.js';
 
 export class Toast extends Container {
   constructor({ message, color = COLORS.PRIMARY, duration = 2000 }) {
@@ -26,7 +27,7 @@ export class Toast extends Container {
     this.addChild(bg);
     this.addChild(text);
 
-    this.position.set(DESIGN_WIDTH / 2, 120);
+    this.position.set(Game.getInstance().screenWidth / 2, 120);
     this.alpha = 0;
 
     const start = Date.now();

@@ -9,7 +9,7 @@ import { Button } from '../ui/Button.js';
 import { Panel } from '../ui/Panel.js';
 import { createAtomVisual } from '../graphics/AtomGraphics.js';
 import { drawLabBackground } from '../graphics/BackgroundGraphics.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class LaboratoryScene extends Scene {
   constructor() {
@@ -24,9 +24,15 @@ export class LaboratoryScene extends Scene {
     this._buildUI();
   }
 
+  onResize() {
+    this.removeChildren();
+    this._buildUI();
+  }
+
   _buildUI() {
     this.removeChildren();
     const loc = Localization.getInstance();
+    const W = this.screenWidth;
 
     drawLabBackground(this);
 
@@ -36,7 +42,7 @@ export class LaboratoryScene extends Scene {
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.TITLE_SIZE, fontWeight: 'bold', fill: COLORS.TEXT_WHITE }
     });
     title.anchor.set(0.5);
-    title.position.set(DESIGN_WIDTH / 2, 30);
+    title.position.set(W / 2, 30);
     this.addChild(title);
 
     // Back button
@@ -59,7 +65,7 @@ export class LaboratoryScene extends Scene {
     const tabW = 280;
     const tabGap = 12;
     const totalTabW = tabs.length * tabW + (tabs.length - 1) * tabGap;
-    const tabStartX = (DESIGN_WIDTH - totalTabW) / 2;
+    const tabStartX = (W - totalTabW) / 2;
 
     for (let i = 0; i < tabs.length; i++) {
       const t = tabs[i];
@@ -100,15 +106,16 @@ export class LaboratoryScene extends Scene {
     const loc = Localization.getInstance();
     const save = SaveManager.getInstance();
     const script = save.getSetting('script');
+    const W = this.screenWidth;
 
     const elements = gameData.elements;
-    const cols = 6;
     const cellW = 160;
     const cellH = 80;
     const gapX = 12;
     const gapY = 12;
+    const cols = Math.max(3, Math.min(6, Math.floor((W - 40) / (cellW + gapX))));
     const gridW = cols * cellW + (cols - 1) * gapX;
-    const startX = (DESIGN_WIDTH - gridW) / 2;
+    const startX = (W - gridW) / 2;
     const startY = 125;
 
     for (let i = 0; i < elements.length; i++) {
@@ -161,7 +168,7 @@ export class LaboratoryScene extends Scene {
       cell.addChild(numText);
 
       if (!discovered) {
-        const lockIcon = new Text({ text: '🔒', style: { fontSize: 12 } });
+        const lockIcon = new Text({ text: '\uD83D\uDD12', style: { fontSize: 12 } });
         lockIcon.position.set(65, 52);
         cell.addChild(lockIcon);
       } else {
@@ -188,15 +195,16 @@ export class LaboratoryScene extends Scene {
     const loc = Localization.getInstance();
     const gameData = GameData.getInstance();
     const progress = ProgressData.getInstance();
+    const W = this.screenWidth;
 
     const molecules = gameData.molecules;
-    const cols = 5;
     const cellW = 210;
     const cellH = 70;
     const gapX = 12;
     const gapY = 10;
+    const cols = Math.max(3, Math.min(5, Math.floor((W - 40) / (cellW + gapX))));
     const gridW = cols * cellW + (cols - 1) * gapX;
-    const startX = (DESIGN_WIDTH - gridW) / 2;
+    const startX = (W - gridW) / 2;
     const startY = 125;
 
     for (let i = 0; i < molecules.length; i++) {
@@ -232,7 +240,7 @@ export class LaboratoryScene extends Scene {
       cell.addChild(nameText);
 
       if (!discovered) {
-        const lockIcon = new Text({ text: '🔒', style: { fontSize: 12 } });
+        const lockIcon = new Text({ text: '\uD83D\uDD12', style: { fontSize: 12 } });
         lockIcon.anchor.set(1, 0.5);
         lockIcon.position.set(cellW - 12, cellH / 2);
         cell.addChild(lockIcon);
@@ -254,20 +262,21 @@ export class LaboratoryScene extends Scene {
     const loc = Localization.getInstance();
     const save = SaveManager.getInstance();
     const script = save.getSetting('script');
+    const W = this.screenWidth;
 
     // Overlay
     this._detailOverlay = new Graphics();
-    this._detailOverlay.rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    this._detailOverlay.rect(0, 0, W, DESIGN_HEIGHT);
     this._detailOverlay.fill({ color: COLORS.OVERLAY, alpha: 0.7 });
     this._detailOverlay.eventMode = 'static';
     this._detailOverlay.on('pointerup', () => this._closeDetail());
     this.addChild(this._detailOverlay);
 
     // Detail panel
-    const pw = 500;
+    const pw = Math.min(500, W - 60);
     const ph = 450;
     this._detailPanel = new Panel({ width: pw, height: ph, color: 0x16213e });
-    this._detailPanel.position.set((DESIGN_WIDTH - pw) / 2, (DESIGN_HEIGHT - ph) / 2);
+    this._detailPanel.position.set((W - pw) / 2, (DESIGN_HEIGHT - ph) / 2);
     this.addChild(this._detailPanel);
 
     const p = this._detailPanel;

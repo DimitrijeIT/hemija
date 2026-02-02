@@ -9,10 +9,10 @@ export class Game {
     instance = this;
     this.app = null;
     this.scale = 1;
-    this.offsetX = 0;
-    this.offsetY = 0;
+    this._screenWidth = DESIGN_WIDTH;
     this.gameContainer = null;
     this._resizeTimer = null;
+    this._onResizeCallback = null;
   }
 
   static getInstance() {
@@ -23,7 +23,6 @@ export class Game {
   async init() {
     this.app = new Application();
 
-    // Get actual viewport size (works better than resizeTo: window on mobile)
     const vw = this._getViewportWidth();
     const vh = this._getViewportHeight();
 
@@ -46,21 +45,20 @@ export class Game {
     const doResize = () => this._debouncedResize();
     window.addEventListener('resize', doResize);
     window.addEventListener('orientationchange', () => {
-      // Orientation change needs a delay - browser hasn't updated dimensions yet
       setTimeout(doResize, 100);
       setTimeout(doResize, 300);
     });
 
-    // visualViewport API is the most reliable on mobile
     if (window.visualViewport) {
       window.visualViewport.addEventListener('resize', doResize);
     }
 
-    // Handle iOS address bar show/hide
     window.addEventListener('scroll', () => {
       window.scrollTo(0, 0);
       doResize();
     });
+
+    this._setupFullscreen();
   }
 
   _getViewportWidth() {
@@ -74,29 +72,52 @@ export class Game {
   _debouncedResize() {
     if (this._resizeTimer) clearTimeout(this._resizeTimer);
     this._resizeTimer = setTimeout(() => this.resize(), 50);
-    // Also do an immediate resize for responsiveness
     this.resize();
+  }
+
+  _setupFullscreen() {
+    const tryFullscreen = () => {
+      const el = document.documentElement;
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch(() => {});
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      }
+    };
+    const handler = () => {
+      tryFullscreen();
+      window.removeEventListener('pointerup', handler);
+      window.removeEventListener('touchend', handler);
+    };
+    window.addEventListener('pointerup', handler);
+    window.addEventListener('touchend', handler);
+    document.addEventListener('fullscreenchange', () => this._debouncedResize());
+    document.addEventListener('webkitfullscreenchange', () => this._debouncedResize());
   }
 
   resize() {
     const screenW = this._getViewportWidth();
     const screenH = this._getViewportHeight();
 
-    // Resize the renderer to match actual viewport
     this.app.renderer.resize(screenW, screenH);
 
-    this.scale = Math.min(screenW / DESIGN_WIDTH, screenH / DESIGN_HEIGHT);
-    this.offsetX = (screenW - DESIGN_WIDTH * this.scale) / 2;
-    this.offsetY = (screenH - DESIGN_HEIGHT * this.scale) / 2;
+    // Height-based scaling: fill entire screen, no letterboxing
+    this.scale = screenH / DESIGN_HEIGHT;
+    this._screenWidth = Math.round(screenW / this.scale);
     this.gameContainer.scale.set(this.scale);
-    this.gameContainer.position.set(this.offsetX, this.offsetY);
+    this.gameContainer.position.set(0, 0);
 
-    // Ensure canvas fills the container
     const canvas = this.app.canvas;
     if (canvas) {
       canvas.style.width = screenW + 'px';
       canvas.style.height = screenH + 'px';
     }
+
+    if (this._onResizeCallback) this._onResizeCallback();
+  }
+
+  get screenWidth() {
+    return this._screenWidth;
   }
 
   get ticker() {
@@ -108,6 +129,6 @@ export class Game {
   }
 
   get screen() {
-    return { width: DESIGN_WIDTH, height: DESIGN_HEIGHT };
+    return { width: this._screenWidth, height: DESIGN_HEIGHT };
   }
 }

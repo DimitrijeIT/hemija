@@ -7,7 +7,7 @@ import { ProgressData } from '../data/ProgressData.js';
 import { Button } from '../ui/Button.js';
 import { Panel } from '../ui/Panel.js';
 import { drawMenuBackground } from '../graphics/BackgroundGraphics.js';
-import { COLORS, FONT, SCENES, DESIGN_WIDTH, DESIGN_HEIGHT } from '../core/Constants.js';
+import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class SettingsScene extends Scene {
   onEnter() {
@@ -15,10 +15,16 @@ export class SettingsScene extends Scene {
     this._buildUI();
   }
 
+  onResize() {
+    this.removeChildren();
+    this._buildUI();
+  }
+
   _buildUI() {
     this.removeChildren();
     const loc = Localization.getInstance();
     const save = SaveManager.getInstance();
+    const W = this.screenWidth;
 
     drawMenuBackground(this);
 
@@ -27,7 +33,7 @@ export class SettingsScene extends Scene {
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.TITLE_SIZE, fontWeight: 'bold', fill: COLORS.TEXT_WHITE }
     });
     title.anchor.set(0.5);
-    title.position.set(DESIGN_WIDTH / 2, 35);
+    title.position.set(W / 2, 35);
     this.addChild(title);
 
     const backBtn = new Button({
@@ -42,10 +48,10 @@ export class SettingsScene extends Scene {
     this.addChild(backBtn);
 
     // Center panel
-    const panelW = 600;
+    const panelW = Math.min(600, W - 100);
     const panelH = 500;
     const panel = new Panel({ width: panelW, height: panelH, color: COLORS.BG_PANEL });
-    panel.position.set((DESIGN_WIDTH - panelW) / 2, 80);
+    panel.position.set((W - panelW) / 2, 80);
     this.addChild(panel);
 
     let yPos = 30;
@@ -73,10 +79,11 @@ export class SettingsScene extends Scene {
     yPos += 40;
 
     const currentScript = save.getSetting('script');
+    const scriptBtnW = Math.min(220, (panelW - 90) / 2);
 
     const latinBtn = new Button({
       label: loc.get('settings.script_latin'),
-      width: 220,
+      width: scriptBtnW,
       height: 44,
       color: currentScript === 'latin' ? COLORS.PRIMARY : COLORS.BUTTON_GRAY,
       fontSize: FONT.BODY_SIZE,
@@ -87,13 +94,13 @@ export class SettingsScene extends Scene {
 
     const cyrBtn = new Button({
       label: loc.get('settings.script_cyrillic'),
-      width: 220,
+      width: scriptBtnW,
       height: 44,
       color: currentScript === 'cyrillic' ? COLORS.PRIMARY : COLORS.BUTTON_GRAY,
       fontSize: FONT.BODY_SIZE,
       onClick: () => { save.setSetting('script', 'cyrillic'); this._buildUI(); }
     });
-    cyrBtn.position.set(280, yPos);
+    cyrBtn.position.set(30 + scriptBtnW + 30, yPos);
     panel.addChild(cyrBtn);
 
     yPos += 80;
@@ -149,22 +156,24 @@ export class SettingsScene extends Scene {
 
   _showResetConfirm() {
     const loc = Localization.getInstance();
+    const W = this.screenWidth;
     const overlay = new Graphics();
-    overlay.rect(0, 0, DESIGN_WIDTH, DESIGN_HEIGHT);
+    overlay.rect(0, 0, W, DESIGN_HEIGHT);
     overlay.fill({ color: COLORS.OVERLAY, alpha: 0.7 });
     overlay.eventMode = 'static';
     this.addChild(overlay);
 
-    const dialog = new Panel({ width: 460, height: 220, color: 0x1a1a3e });
-    dialog.position.set((DESIGN_WIDTH - 460) / 2, (DESIGN_HEIGHT - 220) / 2);
+    const dialogW = Math.min(460, W - 60);
+    const dialog = new Panel({ width: dialogW, height: 220, color: 0x1a1a3e });
+    dialog.position.set((W - dialogW) / 2, (DESIGN_HEIGHT - 220) / 2);
     this.addChild(dialog);
 
     const msg = new Text({
       text: loc.get('settings.reset_confirm'),
-      style: { fontFamily: FONT.FAMILY, fontSize: FONT.BODY_SIZE, fill: COLORS.TEXT_WHITE, wordWrap: true, wordWrapWidth: 400, align: 'center' }
+      style: { fontFamily: FONT.FAMILY, fontSize: FONT.BODY_SIZE, fill: COLORS.TEXT_WHITE, wordWrap: true, wordWrapWidth: dialogW - 60, align: 'center' }
     });
     msg.anchor.set(0.5, 0);
-    msg.position.set(230, 30);
+    msg.position.set(dialogW / 2, 30);
     dialog.addChild(msg);
 
     const yesBtn = new Button({
@@ -194,7 +203,7 @@ export class SettingsScene extends Scene {
         this.removeChild(dialog);
       }
     });
-    noBtn.position.set(255, 140);
+    noBtn.position.set(dialogW - 205, 140);
     dialog.addChild(noBtn);
   }
 }
