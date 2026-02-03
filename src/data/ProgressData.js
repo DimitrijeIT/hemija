@@ -51,6 +51,15 @@ export class ProgressData {
           this.progress.discoveredElements.push(ing.element_id);
         }
       }
+    } else {
+      const expConfig = gameData.getExperimentLevelConfig(chapterId, levelNumber);
+      if (expConfig && expConfig.experiment) {
+        const expId = expConfig.experiment.id;
+        if (!this.progress.discoveredExperiments) this.progress.discoveredExperiments = [];
+        if (!this.progress.discoveredExperiments.includes(expId)) {
+          this.progress.discoveredExperiments.push(expId);
+        }
+      }
     }
 
     let coinsEarned = stars * gameData.rewards.level_complete.coins_per_star;

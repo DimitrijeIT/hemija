@@ -47,7 +47,8 @@ export const SCENES = {
   GAMEPLAY: 'gameplay',
   LEVEL_COMPLETE: 'level_complete',
   SETTINGS: 'settings',
-  LABORATORY: 'laboratory'
+  LABORATORY: 'laboratory',
+  EXPERIMENT: 'experiment'
 };
 
 export const SAVE_KEY = 'hemilab_save';

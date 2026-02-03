@@ -51,6 +51,17 @@ const MOLECULE_IMAGES = {
   cao:   'images/molecules/calcium_oxide.jpg'
 };
 
+const EXPERIMENT_IMAGES = {
+  na_water:              'images/experiments/sodium_water.jpg',
+  fe_rust:               'images/experiments/iron_rusting.jpg',
+  mg_fire:               'images/experiments/magnesium_burning.jpg',
+  h2_o2_combustion:      'images/experiments/hydrogen_combustion.jpg',
+  k_water:               'images/experiments/potassium_water.jpg',
+  hcl_naoh:              'images/experiments/neutralization.jpg',
+  ca_water:              'images/experiments/calcium_water.jpg',
+  h2s_formation:         'images/experiments/hydrogen_sulfide_formation.jpg'
+};
+
 export function getElementImagePath(symbol) {
   return ELEMENT_IMAGES[symbol] || null;
 }
@@ -63,10 +74,15 @@ export function getMoleculeImagePath(moleculeId) {
   return MOLECULE_IMAGES[moleculeId] || null;
 }
 
+export function getExperimentImagePath(experimentId) {
+  return EXPERIMENT_IMAGES[experimentId] || null;
+}
+
 export function getAllImagePaths() {
   return [
     ...Object.values(ELEMENT_IMAGES),
     ...Object.values(ELEMENT_HOUSEHOLD_IMAGES),
-    ...Object.values(MOLECULE_IMAGES)
+    ...Object.values(MOLECULE_IMAGES),
+    ...Object.values(EXPERIMENT_IMAGES)
   ];
 }

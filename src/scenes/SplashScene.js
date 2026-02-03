@@ -96,7 +96,7 @@ export class SplashScene extends Scene {
     loc.init(loader.get('strings_sr'), loader.get('strings_sr_cyr'));
 
     const gameData = GameData.getInstance();
-    gameData.init(loader.get('elements'), loader.get('molecules'), loader.get('chapters'));
+    gameData.init(loader.get('elements'), loader.get('molecules'), loader.get('chapters'), loader.get('experiments'));
 
     this._drawProgress(1, barWidth, barHeight);
     this._statusText.text = loc.get('common.loading');

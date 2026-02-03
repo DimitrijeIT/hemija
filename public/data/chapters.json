@@ -115,6 +115,69 @@
           "tutorial": false
         }
       ]
+    },
+    {
+      "id": 3,
+      "title_sr": "Eksperimenti",
+      "description_sr": "Predvidi sta ce se desiti i gledaj hemijske reakcije uzivo!",
+      "icon": "chapter3_icon",
+      "background": "bg_chapter3",
+      "scene_type": "experiment",
+      "unlock_requirement": {
+        "chapter_id": 2,
+        "min_stars": 16
+      },
+      "elements_introduced": [],
+      "levels": [
+        {
+          "level_number": 1,
+          "experiment_id": "na_water",
+          "stars_to_unlock": 0,
+          "tutorial": false
+        },
+        {
+          "level_number": 2,
+          "experiment_id": "fe_rust",
+          "stars_to_unlock": 2,
+          "tutorial": false
+        },
+        {
+          "level_number": 3,
+          "experiment_id": "mg_fire",
+          "stars_to_unlock": 4,
+          "tutorial": false
+        },
+        {
+          "level_number": 4,
+          "experiment_id": "h2_o2_combustion",
+          "stars_to_unlock": 6,
+          "tutorial": false
+        },
+        {
+          "level_number": 5,
+          "experiment_id": "k_water",
+          "stars_to_unlock": 8,
+          "tutorial": false
+        },
+        {
+          "level_number": 6,
+          "experiment_id": "hcl_naoh",
+          "stars_to_unlock": 10,
+          "tutorial": false
+        },
+        {
+          "level_number": 7,
+          "experiment_id": "ca_water",
+          "stars_to_unlock": 14,
+          "tutorial": false
+        },
+        {
+          "level_number": 8,
+          "experiment_id": "h2s_formation",
+          "stars_to_unlock": 18,
+          "tutorial": false
+        }
+      ]
     }
   ],
   "star_rating": {

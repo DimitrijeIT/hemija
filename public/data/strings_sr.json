@@ -155,6 +155,32 @@
       "save_failed": "Greška pri čuvanju napretka.",
       "generic": "Nešto nije u redu. Pokušaj ponovo."
     },
+    "experiment": {
+      "title": "Eksperiment",
+      "predict_title": "Predvidi rezultat!",
+      "predict_question": "Sta mislis da ce se desiti?",
+      "predict_button": "Predvidi!",
+      "prediction_bonus": "Bonus za predvidjanje",
+      "watch_title": "Posmatraj reakciju...",
+      "result_correct": "Tacno! Odlicno predvidjanje!",
+      "result_incorrect": "Nije tacno, ali si naucio/la nesto novo!",
+      "equation_label": "Jednacina reakcije:",
+      "products_label": "Proizvodi:",
+      "danger_warning": "OPASNO - Ne pokusavaj kod kuce!",
+      "danger_caution": "OPREZ - Samo uz nadzor nastavnika!",
+      "danger_safe": "Bezbedna reakcija",
+      "fun_fact": "Zanimljivost",
+      "real_world": "U stvarnom svetu",
+      "reaction_types": {
+        "synthesis": "Sinteza",
+        "single_replacement": "Reakcija zamene",
+        "oxidation": "Oksidacija",
+        "neutralization": "Neutralizacija"
+      },
+      "next_experiment": "Sledeci eksperiment",
+      "replay": "Ponovi",
+      "back_to_chapter": "Nazad na poglavlje"
+    },
     "common": {
       "ok": "U redu",
       "cancel": "Otkaži",

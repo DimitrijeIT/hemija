@@ -13,6 +13,7 @@ import { GameplayScene } from './scenes/GameplayScene.js';
 import { LevelCompleteScene } from './scenes/LevelCompleteScene.js';
 import { SettingsScene } from './scenes/SettingsScene.js';
 import { LaboratoryScene } from './scenes/LaboratoryScene.js';
+import { ExperimentScene } from './scenes/ExperimentScene.js';
 
 async function boot() {
   const game = Game.getInstance();
@@ -28,6 +29,7 @@ async function boot() {
   sceneManager.register(SCENES.LEVEL_COMPLETE, LevelCompleteScene);
   sceneManager.register(SCENES.SETTINGS, SettingsScene);
   sceneManager.register(SCENES.LABORATORY, LaboratoryScene);
+  sceneManager.register(SCENES.EXPERIMENT, ExperimentScene);
 
   sceneManager.switchTo(SCENES.SPLASH);
 }

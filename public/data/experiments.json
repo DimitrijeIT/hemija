@@ -1,0 +1,316 @@
+{
+  "version": "1.0.0",
+  "experiments": [
+    {
+      "id": "na_water",
+      "level_number": 1,
+      "title_sr": "Natrijum u vodi",
+      "reactants": [
+        { "formula": "Na", "name_sr": "Natrijum", "element_ids": ["Na"] },
+        { "formula": "H2O", "name_sr": "Voda", "element_ids": ["H", "O"] }
+      ],
+      "products": [
+        { "formula": "NaOH", "name_sr": "Natrijum-hidroksid" },
+        { "formula": "H2", "name_sr": "Vodonik" }
+      ],
+      "equation_sr": "2Na + 2H2O -> 2NaOH + H2",
+      "reaction_type": "single_replacement",
+      "danger_level": 3,
+      "animation_type": "explosion",
+      "animation_config": {
+        "primary_color": "0xff6600",
+        "secondary_color": "0xffff00",
+        "particle_count": 40,
+        "duration": 2000,
+        "screen_shake": true,
+        "flash_color": "0xffffff",
+        "effects": ["sparks", "steam"]
+      },
+      "teacher_before_sr": "Evo komadica natrijuma i case vode. Sta mislis da ce se desiti kad ubacimo natrijum u vodu?",
+      "teacher_after_sr": "Natrijum burno reaguje sa vodom! Stvara se natrijum-hidroksid i vodonik gas, koji moze da se zapali. Zato je ovaj eksperiment opasan!",
+      "fun_fact_sr": "Natrijum se cuva u petroleju jer reaguje cak i sa vlagom iz vazduha!",
+      "real_world_sr": "Alkalni metali se koriste u industriji za proizvodnju sapuna i detergenata.",
+      "prediction_options": [
+        { "text_sr": "Natrijum ce se rastvoriti mirno, kao so", "correct": false },
+        { "text_sr": "Doci ce do burne reakcije sa plamenom i eksplozijom", "correct": true },
+        { "text_sr": "Nista se nece desiti - natrijum ne reaguje sa vodom", "correct": false },
+        { "text_sr": "Voda ce se zamrznuti oko natrijuma", "correct": false }
+      ],
+      "difficulty": 1,
+      "base_points": 100,
+      "stars_to_unlock": 0,
+      "image": "images/experiments/sodium_water.jpg"
+    },
+    {
+      "id": "fe_rust",
+      "level_number": 2,
+      "title_sr": "Rdjanje gvozdja",
+      "reactants": [
+        { "formula": "Fe", "name_sr": "Gvozdje", "element_ids": ["Fe"] },
+        { "formula": "O2", "name_sr": "Kiseonik", "element_ids": ["O"] },
+        { "formula": "H2O", "name_sr": "Voda", "element_ids": ["H", "O"] }
+      ],
+      "products": [
+        { "formula": "Fe2O3", "name_sr": "Gvozdje(III)-oksid (rdja)" }
+      ],
+      "equation_sr": "4Fe + 3O2 + 6H2O -> 4Fe(OH)3 -> 2Fe2O3 + 6H2O",
+      "reaction_type": "oxidation",
+      "danger_level": 0,
+      "animation_type": "gradual_change",
+      "animation_config": {
+        "primary_color": "0x8B4513",
+        "secondary_color": "0xB7410E",
+        "duration": 3000,
+        "stages": 5,
+        "effects": ["color_spread"]
+      },
+      "teacher_before_sr": "Imamo komad gvozda na vlaznom vazduhu. Sta ce se desiti posle nekog vremena?",
+      "teacher_after_sr": "Gvozdje polako reaguje sa kiseonikom i vodom iz vazduha i nastaje rdja - gvozdje(III)-oksid. Ovo je spora oksidacija koja traje danima i nedeljama!",
+      "fun_fact_sr": "Ajfelov toranj u Parizu mora da se farba svakih 7 godina da bi se zastitio od rdje!",
+      "real_world_sr": "Rdjanje je najveci neprijatelj metalnih konstrukcija - mostova, automobila i brodova.",
+      "prediction_options": [
+        { "text_sr": "Gvozdje ce postati sjajnije i jace", "correct": false },
+        { "text_sr": "Gvozdje ce pocrveneti i pretvoriti se u rdju", "correct": true },
+        { "text_sr": "Gvozdje ce se istopiti", "correct": false },
+        { "text_sr": "Gvozdje ce postati magneticno", "correct": false }
+      ],
+      "difficulty": 1,
+      "base_points": 100,
+      "stars_to_unlock": 2,
+      "image": "images/experiments/iron_rusting.jpg"
+    },
+    {
+      "id": "mg_fire",
+      "level_number": 3,
+      "title_sr": "Sagorevanje magnezijuma",
+      "reactants": [
+        { "formula": "Mg", "name_sr": "Magnezijum", "element_ids": ["Mg"] },
+        { "formula": "O2", "name_sr": "Kiseonik", "element_ids": ["O"] }
+      ],
+      "products": [
+        { "formula": "MgO", "name_sr": "Magnezijum-oksid" }
+      ],
+      "equation_sr": "2Mg + O2 -> 2MgO",
+      "reaction_type": "synthesis",
+      "danger_level": 2,
+      "animation_type": "bright_flash",
+      "animation_config": {
+        "primary_color": "0xffffff",
+        "secondary_color": "0xccccff",
+        "particle_count": 30,
+        "duration": 2500,
+        "flash_intensity": 1.0,
+        "effects": ["white_sparks"]
+      },
+      "teacher_before_sr": "Evo magnezijumove trake. Sta mislis da ce se desiti kad je zapalimo?",
+      "teacher_after_sr": "Magnezijum sagoreva izuzetno jarkim belim plamenom! Nastaje beli prasak - magnezijum-oksid. Ovaj plamen je toliko jak da moze da ošteti oci!",
+      "fun_fact_sr": "Magnezijumov plamen je toliko vruc (3100°C) da moze da gori cak i pod vodom!",
+      "real_world_sr": "Magnezijum se koristi u vatrometu i signalnim raketama zbog svog jarkog plamena.",
+      "prediction_options": [
+        { "text_sr": "Magnezijum ce se istopiti u srebrnu kaplju", "correct": false },
+        { "text_sr": "Sagorevace jarkim belim plamenom", "correct": true },
+        { "text_sr": "Magnezijum nece goreti - metali ne sagorevaju", "correct": false },
+        { "text_sr": "Sagorevace tihim plavim plamenom", "correct": false }
+      ],
+      "difficulty": 2,
+      "base_points": 120,
+      "stars_to_unlock": 4,
+      "image": "images/experiments/magnesium_burning.jpg"
+    },
+    {
+      "id": "h2_o2_combustion",
+      "level_number": 4,
+      "title_sr": "Sagorevanje vodonika",
+      "reactants": [
+        { "formula": "H2", "name_sr": "Vodonik", "element_ids": ["H"] },
+        { "formula": "O2", "name_sr": "Kiseonik", "element_ids": ["O"] }
+      ],
+      "products": [
+        { "formula": "H2O", "name_sr": "Voda" }
+      ],
+      "equation_sr": "2H2 + O2 -> 2H2O",
+      "reaction_type": "synthesis",
+      "danger_level": 3,
+      "animation_type": "explosion",
+      "animation_config": {
+        "primary_color": "0x3399ff",
+        "secondary_color": "0xff4444",
+        "particle_count": 35,
+        "duration": 1800,
+        "screen_shake": true,
+        "flash_color": "0xffffff",
+        "effects": ["steam", "flash"]
+      },
+      "teacher_before_sr": "Imamo balon napunjen vodonikom i upalimo ga. Sta ce se desiti?",
+      "teacher_after_sr": "Vodonik eksplodira kad se zapali u prisustvu kiseonika! Ali proizvod je samo - voda! Ovo je jedna od najcistijih hemijskih reakcija. Ovaj eksperiment je veoma opasan - nikada ne pokusavaj sam/a kod kuce!",
+      "fun_fact_sr": "Vodonicni motori u svemirskim raketama koriste upravo ovu reakciju za pogon!",
+      "real_world_sr": "Vodonik se istrazuje kao gorivo buducnosti jer pri sagorevanju nastaje samo voda.",
+      "prediction_options": [
+        { "text_sr": "Nista se nece desiti - vodonik ne gori", "correct": false },
+        { "text_sr": "Balon ce polako izduvati gas", "correct": false },
+        { "text_sr": "Doci ce do eksplozije, a nastace voda", "correct": true },
+        { "text_sr": "Vodonik ce se pretvoriti u helijum", "correct": false }
+      ],
+      "difficulty": 2,
+      "base_points": 120,
+      "stars_to_unlock": 6,
+      "image": "images/experiments/hydrogen_combustion.jpg"
+    },
+    {
+      "id": "k_water",
+      "level_number": 5,
+      "title_sr": "Kalijum u vodi",
+      "reactants": [
+        { "formula": "K", "name_sr": "Kalijum", "element_ids": ["K"] },
+        { "formula": "H2O", "name_sr": "Voda", "element_ids": ["H", "O"] }
+      ],
+      "products": [
+        { "formula": "KOH", "name_sr": "Kalijum-hidroksid" },
+        { "formula": "H2", "name_sr": "Vodonik" }
+      ],
+      "equation_sr": "2K + 2H2O -> 2KOH + H2",
+      "reaction_type": "single_replacement",
+      "danger_level": 3,
+      "animation_type": "explosion",
+      "animation_config": {
+        "primary_color": "0x9933ff",
+        "secondary_color": "0xff66ff",
+        "particle_count": 50,
+        "duration": 2500,
+        "screen_shake": true,
+        "flash_color": "0xcc66ff",
+        "effects": ["purple_flame", "sparks", "steam"]
+      },
+      "teacher_before_sr": "Sada cemo ubaciti kalijum u vodu. Secas se sta se desilo sa natrijumom? Sta ocekujes ovde?",
+      "teacher_after_sr": "Kalijum reaguje JOS BURNIJE nego natrijum! Plamen je ljubicast jer kalijum boji plamen u tu boju. Kalijum je ispod natrijuma u periodnom sistemu - sto nize, to burnije reaguje! Ovo je veoma opasna reakcija i radi se samo u specijalizovanim laboratorijama sa zastitnom opremom.",
+      "fun_fact_sr": "Boja plamena je jedinstvena za svaki element - to se zove test plamenom i hemicari ga koriste za identifikaciju metala!",
+      "real_world_sr": "Kalijum je vazan mineral za ljudsko telo - nalazimo ga u bananama, krompiru i avokadu.",
+      "prediction_options": [
+        { "text_sr": "Reagovace mirnije od natrijuma", "correct": false },
+        { "text_sr": "Reagovace isto kao natrijum", "correct": false },
+        { "text_sr": "Reagovace jos burnije, sa ljubicastim plamenom", "correct": true },
+        { "text_sr": "Kalijum ce potonuti i nece reagovati", "correct": false }
+      ],
+      "difficulty": 2,
+      "base_points": 130,
+      "stars_to_unlock": 8,
+      "image": "images/experiments/potassium_water.jpg"
+    },
+    {
+      "id": "hcl_naoh",
+      "level_number": 6,
+      "title_sr": "Neutralizacija",
+      "reactants": [
+        { "formula": "HCl", "name_sr": "Hlorovodonična kiselina", "element_ids": ["H", "Cl"] },
+        { "formula": "NaOH", "name_sr": "Natrijum-hidroksid", "element_ids": ["Na", "O", "H"] }
+      ],
+      "products": [
+        { "formula": "NaCl", "name_sr": "Natrijum-hlorid (so)" },
+        { "formula": "H2O", "name_sr": "Voda" }
+      ],
+      "equation_sr": "HCl + NaOH -> NaCl + H2O",
+      "reaction_type": "neutralization",
+      "danger_level": 1,
+      "animation_type": "color_change",
+      "animation_config": {
+        "primary_color": "0xff4444",
+        "secondary_color": "0x44ff44",
+        "final_color": "0x4444ff",
+        "duration": 3000,
+        "effects": ["color_cycle", "gentle_mix"]
+      },
+      "teacher_before_sr": "Imamo kiselinu (HCl) i bazu (NaOH). Sta se desi kad ih pomesamo?",
+      "teacher_after_sr": "Kiselina i baza se neutralisu! Nastaje obicna kuhinjska so (NaCl) i voda. Ova reakcija se zove neutralizacija - kiselina i baza se poniste.",
+      "fun_fact_sr": "Tvoj stomak koristi hlorovodonicnu kiselinu (HCl) za varenje hrane, a antacidi su baze koje je neutralisu kad te boli stomak!",
+      "real_world_sr": "Neutralizacija se koristi za preciscavanje vode i u medicini protiv gorušice.",
+      "prediction_options": [
+        { "text_sr": "Doci ce do eksplozije", "correct": false },
+        { "text_sr": "Nastace otrovan gas", "correct": false },
+        { "text_sr": "Nastace so i voda - mirna reakcija", "correct": true },
+        { "text_sr": "Tecnosti ce se odvojiti u dva sloja", "correct": false }
+      ],
+      "difficulty": 3,
+      "base_points": 150,
+      "stars_to_unlock": 10,
+      "image": "images/experiments/neutralization.jpg"
+    },
+    {
+      "id": "ca_water",
+      "level_number": 7,
+      "title_sr": "Kalcijum u vodi",
+      "reactants": [
+        { "formula": "Ca", "name_sr": "Kalcijum", "element_ids": ["Ca"] },
+        { "formula": "H2O", "name_sr": "Voda", "element_ids": ["H", "O"] }
+      ],
+      "products": [
+        { "formula": "Ca(OH)2", "name_sr": "Kalcijum-hidroksid" },
+        { "formula": "H2", "name_sr": "Vodonik" }
+      ],
+      "equation_sr": "Ca + 2H2O -> Ca(OH)2 + H2",
+      "reaction_type": "single_replacement",
+      "danger_level": 1,
+      "animation_type": "bubbling",
+      "animation_config": {
+        "primary_color": "0xeeeeee",
+        "secondary_color": "0xcccccc",
+        "particle_count": 25,
+        "duration": 3000,
+        "bubble_count": 15,
+        "water_color": "0xaabbcc",
+        "effects": ["bubbles", "milky_water"]
+      },
+      "teacher_before_sr": "Ubacicemo komadic kalcijuma u casu vode. Sta ocekujes?",
+      "teacher_after_sr": "Kalcijum reaguje sa vodom, ali mirnije od natrijuma i kalijuma. Vidis mehurice? To je vodonik! Voda postaje mlecno bela jer nastaje kalcijum-hidroksid, poznat kao krecna voda.",
+      "fun_fact_sr": "Krecna voda se koristi za proveru prisustva ugljen-dioksida - kad duvas u nju, ona se zamuti!",
+      "real_world_sr": "Kalcijum je glavna komponenta nasih kostiju i zuba. Mleko je bogato kalcijumom!",
+      "prediction_options": [
+        { "text_sr": "Kalcijum ce se rastvoriti bez ikakve reakcije", "correct": false },
+        { "text_sr": "Doci ce do jake eksplozije", "correct": false },
+        { "text_sr": "Pojavice se mehurice, a voda ce postati mlecno bela", "correct": true },
+        { "text_sr": "Kalcijum ce potonuti na dno i ostati nepromenjen", "correct": false }
+      ],
+      "difficulty": 2,
+      "base_points": 130,
+      "stars_to_unlock": 14,
+      "image": "images/experiments/calcium_water.jpg"
+    },
+    {
+      "id": "h2s_formation",
+      "level_number": 8,
+      "title_sr": "Stvaranje vodonik-sulfida",
+      "reactants": [
+        { "formula": "H2", "name_sr": "Vodonik", "element_ids": ["H"] },
+        { "formula": "S", "name_sr": "Sumpor", "element_ids": ["S"] }
+      ],
+      "products": [
+        { "formula": "H2S", "name_sr": "Vodonik-sulfid" }
+      ],
+      "equation_sr": "H2 + S -> H2S",
+      "reaction_type": "synthesis",
+      "danger_level": 3,
+      "animation_type": "gas_release",
+      "animation_config": {
+        "primary_color": "0xcccc00",
+        "secondary_color": "0x999900",
+        "particle_count": 20,
+        "duration": 2800,
+        "gas_color": "0xaaaa33",
+        "effects": ["stink_lines", "gas_cloud"]
+      },
+      "teacher_before_sr": "Zagrejacemo smešu vodonika i sumpora. Sta mislis da ce nastati?",
+      "teacher_after_sr": "Nastao je vodonik-sulfid - gas koji uzasno smrdi na pokvarena jaja! Ovaj gas je otrovan i opasan po zdravlje - nikada ne pokusavaj da ga napravis sam/a! U malim kolicinama ga prepoznajemo po tom karakteristicnom mirisu.",
+      "fun_fact_sr": "Miris pokvarenih jaja dolazi upravo od vodonik-sulfida! Nasi nosevi mogu da ga osete u neverovatno malim kolicinama.",
+      "real_world_sr": "Vodonik-sulfid se prirodno stvara u vulkanima i toplim izvorima. Nalazimo ga i u digestivnom sistemu!",
+      "prediction_options": [
+        { "text_sr": "Nastace tecnost prijatnog mirisa", "correct": false },
+        { "text_sr": "Nista se nece desiti", "correct": false },
+        { "text_sr": "Nastace gas koji smrdi na pokvarena jaja", "correct": true },
+        { "text_sr": "Sumpor ce eksplodirati", "correct": false }
+      ],
+      "difficulty": 2,
+      "base_points": 130,
+      "stars_to_unlock": 18,
+      "image": "images/experiments/hydrogen_sulfide_formation.jpg"
+    }
+  ]
+}

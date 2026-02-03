@@ -15,6 +15,7 @@ const DEFAULT_SAVE = {
     totalCoins: 0,
     discoveredElements: [],
     discoveredMolecules: [],
+    discoveredExperiments: [],
     chaptersCompleted: []
   }
 };
@@ -38,6 +39,7 @@ export class SaveManager {
         this._data = JSON.parse(raw);
         if (!this._data.settings) this._data.settings = { ...DEFAULT_SAVE.settings };
         if (!this._data.progress) this._data.progress = { ...DEFAULT_SAVE.progress };
+        if (!this._data.progress.discoveredExperiments) this._data.progress.discoveredExperiments = [];
       } else {
         this._data = JSON.parse(JSON.stringify(DEFAULT_SAVE));
       }

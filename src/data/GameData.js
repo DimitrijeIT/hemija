@@ -7,8 +7,10 @@ export class GameData {
     this._elements = [];
     this._molecules = [];
     this._chapters = [];
+    this._experiments = [];
     this._elementMap = {};
     this._moleculeMap = {};
+    this._experimentMap = {};
     this._starRating = {};
     this._rewards = {};
   }
@@ -18,7 +20,7 @@ export class GameData {
     return instance;
   }
 
-  init(elementsData, moleculesData, chaptersData) {
+  init(elementsData, moleculesData, chaptersData, experimentsData) {
     this._elements = elementsData.elements;
     this._molecules = moleculesData.molecules;
     this._chapters = chaptersData.chapters;
@@ -30,6 +32,13 @@ export class GameData {
     }
     for (const mol of this._molecules) {
       this._moleculeMap[mol.id] = mol;
+    }
+
+    if (experimentsData && experimentsData.experiments) {
+      this._experiments = experimentsData.experiments;
+      for (const exp of this._experiments) {
+        this._experimentMap[exp.id] = exp;
+      }
     }
   }
 
@@ -100,5 +109,22 @@ export class GameData {
       element: this.getElement(ing.element_id),
       count: ing.count
     }));
+  }
+
+  getExperiment(id) {
+    return this._experimentMap[id];
+  }
+
+  get experiments() {
+    return this._experiments;
+  }
+
+  getExperimentLevelConfig(chapterId, levelNumber) {
+    const chapter = this.getChapter(chapterId);
+    if (!chapter) return null;
+    const levelDef = chapter.levels.find(l => l.level_number === levelNumber);
+    if (!levelDef || !levelDef.experiment_id) return null;
+    const experiment = this.getExperiment(levelDef.experiment_id);
+    return { ...levelDef, experiment, chapter };
   }
 }

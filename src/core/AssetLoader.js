@@ -1,12 +1,13 @@
 import { Assets } from 'pixi.js';
-import { getElementImagePath, getElementHouseholdImagePath, getMoleculeImagePath, getAllImagePaths } from '../data/ImageManifest.js';
+import { getElementImagePath, getElementHouseholdImagePath, getMoleculeImagePath, getExperimentImagePath, getAllImagePaths } from '../data/ImageManifest.js';
 
 const DATA_FILES = {
   elements: 'data/elements.json',
   molecules: 'data/molecules.json',
   chapters: 'data/chapters.json',
   strings_sr: 'data/strings_sr.json',
-  strings_sr_cyr: 'data/strings_sr_cyr.json'
+  strings_sr_cyr: 'data/strings_sr_cyr.json',
+  experiments: 'data/experiments.json'
 };
 
 let instance = null;
@@ -71,6 +72,11 @@ export class AssetLoader {
 
   getMoleculeTexture(moleculeId) {
     const path = getMoleculeImagePath(moleculeId);
+    return path ? this.textures[path] || null : null;
+  }
+
+  getExperimentTexture(experimentId) {
+    const path = getExperimentImagePath(experimentId);
     return path ? this.textures[path] || null : null;
   }
 }

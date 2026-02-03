@@ -150,7 +150,8 @@ export class ChapterSelectScene extends Scene {
 
       const unlocked = progress.isLevelUnlocked(chapter.id, lv.level_number);
       const lvProgress = progress.getLevelProgress(chapter.id, lv.level_number);
-      const molecule = gameData.getMolecule(lv.molecule_id);
+      const molecule = lv.molecule_id ? gameData.getMolecule(lv.molecule_id) : null;
+      const experiment = lv.experiment_id ? gameData.getExperiment(lv.experiment_id) : null;
 
       const dot = new Container();
       dot.position.set(x, y);
@@ -190,6 +191,25 @@ export class ChapterSelectScene extends Scene {
           nameText.position.set(dotW / 2, 74);
           dot.addChild(nameText);
         }
+      } else if (experiment) {
+        const expTitle = loc.t(experiment.title_sr);
+        const formulaText = new Text({
+          text: experiment.reactants.map(r => r.formula).join('+'),
+          style: { fontFamily: FONT.FAMILY, fontSize: FONT.SMALL_SIZE, fill: unlocked ? COLORS.PRIMARY_LIGHT : COLORS.TEXT_DIM }
+        });
+        formulaText.anchor.set(0.5);
+        formulaText.position.set(dotW / 2, 54);
+        dot.addChild(formulaText);
+
+        if (unlocked) {
+          const nameText = new Text({
+            text: expTitle.length > 14 ? expTitle.substring(0, 13) + '\u2026' : expTitle,
+            style: { fontFamily: FONT.FAMILY, fontSize: 12, fill: COLORS.TEXT_DIM }
+          });
+          nameText.anchor.set(0.5);
+          nameText.position.set(dotW / 2, 74);
+          dot.addChild(nameText);
+        }
       }
 
       if (!unlocked) {
@@ -221,7 +241,8 @@ export class ChapterSelectScene extends Scene {
         dot.eventMode = 'static';
         dot.cursor = 'pointer';
         dot.on('pointerup', () => {
-          SceneManager.getInstance().switchTo(SCENES.GAMEPLAY, {
+          const targetScene = chapter.scene_type === 'experiment' ? SCENES.EXPERIMENT : SCENES.GAMEPLAY;
+          SceneManager.getInstance().switchTo(targetScene, {
             chapterId: chapter.id,
             levelNumber: lv.level_number
           });
