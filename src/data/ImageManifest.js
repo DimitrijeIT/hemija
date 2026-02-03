@@ -19,18 +19,18 @@ const ELEMENT_IMAGES = {
 };
 
 const ELEMENT_HOUSEHOLD_IMAGES = {
-  H:  'images/elements_household/hydrogen.svg',
-  O:  'images/elements_household/oxygen.svg',
-  C:  'images/elements_household/carbon.svg',
-  N:  'images/elements_household/nitrogen.svg',
-  Na: 'images/elements_household/sodium.svg',
-  Cl: 'images/elements_household/chlorine.svg',
-  K:  'images/elements_household/potassium.svg',
-  Ca: 'images/elements_household/calcium.svg',
-  S:  'images/elements_household/sulfur.svg',
-  P:  'images/elements_household/phosphorus.svg',
-  Mg: 'images/elements_household/magnesium.svg',
-  Fe: 'images/elements_household/iron.svg'
+  H:  'images/elements_household/hydrogen.jpg',
+  O:  'images/elements_household/oxygen.jpg',
+  C:  'images/elements_household/carbon.jpg',
+  N:  'images/elements_household/nitrogen.jpg',
+  Na: 'images/elements_household/sodium.jpg',
+  Cl: 'images/elements_household/chlorine.jpg',
+  K:  'images/elements_household/potassium.jpg',
+  Ca: 'images/elements_household/calcium.jpg',
+  S:  'images/elements_household/sulfur.jpg',
+  P:  'images/elements_household/phosphorus.jpg',
+  Mg: 'images/elements_household/magnesium.jpg',
+  Fe: 'images/elements_household/iron.jpg'
 };
 
 const MOLECULE_IMAGES = {

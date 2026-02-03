@@ -301,13 +301,13 @@ export class TeacherPopup extends Container {
       tween(factBg, { alpha: 1 }, 400, { ease: easeLinear });
     }, 1200);
 
-    // === Navigation buttons (right column, bottom) ===
+    // === Navigation buttons (right-aligned for easy phone thumb access) ===
     const chapter = gameData.getChapter(chapterId);
     const nextLevel = chapter.levels.find(l => l.level_number === levelNumber + 1);
     const hasNext = nextLevel && progress.isLevelUnlocked(chapterId, levelNumber + 1);
 
     const btnW = Math.min(220, rightColW - 10);
-    let btnX = rightColX;
+    let btnX = W - btnW - 20;
     let btnY = DESIGN_HEIGHT - 170;
 
     if (hasNext) {
