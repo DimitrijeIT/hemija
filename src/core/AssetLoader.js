@@ -1,5 +1,5 @@
 import { Assets } from 'pixi.js';
-import { getElementImagePath, getMoleculeImagePath, getAllImagePaths } from '../data/ImageManifest.js';
+import { getElementImagePath, getElementHouseholdImagePath, getMoleculeImagePath, getAllImagePaths } from '../data/ImageManifest.js';
 
 const DATA_FILES = {
   elements: 'data/elements.json',
@@ -61,6 +61,11 @@ export class AssetLoader {
 
   getElementTexture(symbol) {
     const path = getElementImagePath(symbol);
+    return path ? this.textures[path] || null : null;
+  }
+
+  getElementHouseholdTexture(symbol) {
+    const path = getElementHouseholdImagePath(symbol);
     return path ? this.textures[path] || null : null;
   }
 

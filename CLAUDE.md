@@ -10,6 +10,8 @@ Target platform: Web (PWA), Android, iOS.
 - `@stefan` - Technical Engineer
 - `@ana` - Product Owner
 - `@ivana` - COPPA Lawyer (veto power)
+- `@nikola` - UI/UX Designer - reviews layouts, alignment, visual polish, animation timing
+- `@jelena` - Accessibility & Localization Tester - checks readability, contrast, text fitting, RTL/Cyrillic support
 - `@team` - Full team discussion
 
 ## Key Constraints
@@ -45,5 +47,7 @@ Target platform: Web (PWA), Android, iOS.
 @stefan design JSON schema for elements
 @ana prioritize MVP features
 @ivana check if we can show ads
+@nikola review layout alignment for narrow screens
+@jelena check contrast and text fitting for Cyrillic
 @team discuss leaderboard feature
 ```

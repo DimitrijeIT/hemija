@@ -18,6 +18,7 @@ import { Toast } from '../ui/Toast.js';
 import { drawGameplayBackground } from '../graphics/BackgroundGraphics.js';
 import { formatFormula } from '../utils/formulaFormat.js';
 import { getTotalElectrons } from '../utils/electronShells.js';
+import { tween, popIn, easeOutBack, easeLinear } from '../utils/animate.js';
 import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class GameplayScene extends Scene {
@@ -396,6 +397,10 @@ export class GameplayScene extends Scene {
     overlay.eventMode = 'static';
     this.addChild(overlay);
 
+    // Overlay fade-in
+    overlay.alpha = 0;
+    tween(overlay, { alpha: 0.7 }, 300, { ease: easeLinear });
+
     const title = new Text({
       text: loc.get('feedback.time_up'),
       style: { fontFamily: FONT.FAMILY, fontSize: FONT.TITLE_SIZE, fontWeight: 'bold', fill: COLORS.ACCENT }
@@ -404,25 +409,46 @@ export class GameplayScene extends Scene {
     title.position.set(W / 2, DESIGN_HEIGHT / 2 - 60);
     this.addChild(title);
 
+    // Title scale pop-in
+    title.scale.set(0);
+    title.alpha = 0;
+    popIn(title, 400);
+
+    // Center buttons as a group
+    const btnW = 240;
+    const btnGap = 16;
+    const totalBtnW = btnW + btnGap + btnW;
+    const btnStartX = (W - totalBtnW) / 2;
+
     const retryBtn = new Button({
       label: loc.get('level_complete.replay'),
-      width: 240,
+      width: btnW,
       height: 56,
       color: COLORS.BUTTON_BLUE,
       onClick: () => SceneManager.getInstance().switchTo(SCENES.GAMEPLAY, { chapterId: this._chapterId, levelNumber: this._levelNumber })
     });
-    retryBtn.position.set(W / 2 - 250, DESIGN_HEIGHT / 2 + 10);
+    retryBtn.position.set(btnStartX, DESIGN_HEIGHT / 2 + 10);
     this.addChild(retryBtn);
+
+    // Staggered button pop-in
+    retryBtn.scale.set(0);
+    retryBtn.alpha = 0;
+    popIn(retryBtn, 300, 200);
 
     const menuBtn = new Button({
       label: loc.get('level_complete.back_to_menu'),
-      width: 240,
+      width: btnW,
       height: 56,
       color: COLORS.BUTTON_GRAY,
       onClick: () => SceneManager.getInstance().switchTo(SCENES.CHAPTER_SELECT, { chapter: this._chapterId })
     });
-    menuBtn.position.set(W / 2 + 10, DESIGN_HEIGHT / 2 + 10);
+    menuBtn.position.set(btnStartX + btnW + btnGap, DESIGN_HEIGHT / 2 + 10);
     this.addChild(menuBtn);
+
+    // Staggered button pop-in with extra delay
+    menuBtn.scale.set(0);
+    menuBtn.alpha = 0;
+    popIn(menuBtn, 300, 400);
   }
 
   update(dt) {

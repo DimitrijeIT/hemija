@@ -13,6 +13,7 @@ import { AudioManager } from '../core/AudioManager.js';
 import { AssetLoader } from '../core/AssetLoader.js';
 import { formatFormula } from '../utils/formulaFormat.js';
 import { Game } from '../core/Game.js';
+import { tween, popIn, sineFloat, easeOutBack, easeLinear } from '../utils/animate.js';
 import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 /**
@@ -31,6 +32,11 @@ export class TeacherPopup extends Container {
     const W = Game.getInstance().screenWidth;
     const coinsEarned = progress.saveLevelResult(chapterId, levelNumber, scoring.stars, scoring.totalScore);
 
+    // === Responsive two-column layout ===
+    const leftColW = Math.min(300, W * 0.35);
+    const rightColX = leftColW + 20;
+    const rightColW = W - rightColX - 20;
+
     // Semi-transparent overlay
     const overlay = new Graphics();
     overlay.rect(0, 0, W, DESIGN_HEIGHT);
@@ -38,34 +44,27 @@ export class TeacherPopup extends Container {
     overlay.eventMode = 'static';
     this.addChild(overlay);
 
-    // Overlay fade in
+    // Overlay fade in using tween
     overlay.alpha = 0;
-    const overlayStart = Date.now();
-    const fadeOverlay = () => {
-      if (this.destroyed) return;
-      const t = Math.min((Date.now() - overlayStart) / 300, 1);
-      overlay.alpha = t * 0.6;
-      if (t < 1) requestAnimationFrame(fadeOverlay);
-    };
-    fadeOverlay();
+    tween(overlay, { alpha: 0.6 }, 300, { ease: easeLinear });
 
-    // === Teacher character (bottom-left) ===
+    // === Teacher character (bottom-left, responsive) ===
     const teacher = createTeacher(1.3);
-    teacher.position.set(90, DESIGN_HEIGHT + 100);
+    const teacherX = Math.min(90, leftColW / 2);
+    teacher.position.set(teacherX, DESIGN_HEIGHT + 100);
     this.addChild(teacher);
 
-    // Teacher slides up from bottom
+    // Teacher slides up from bottom using tween
     const teacherTargetY = DESIGN_HEIGHT - 100;
-    const teacherStart = Date.now();
-    const slideTeacher = () => {
+    setTimeout(() => {
       if (this.destroyed) return;
-      const t = Math.min((Date.now() - teacherStart) / 600, 1);
-      // Elastic ease out
-      const ease = t < 1 ? 1 - Math.pow(2, -8 * t) * Math.cos(t * 3 * Math.PI) * 0.3 : 1;
-      teacher.y = DESIGN_HEIGHT + 100 - (DESIGN_HEIGHT + 100 - teacherTargetY) * ease;
-      if (t < 1) requestAnimationFrame(slideTeacher);
-    };
-    setTimeout(slideTeacher, 200);
+      tween(teacher, { y: teacherTargetY }, 600, { ease: easeOutBack }).then(() => {
+        // Gentle floating bob after landing
+        if (!this.destroyed && !teacher.destroyed) {
+          sineFloat(teacher, 'y', 3, 1.5);
+        }
+      });
+    }, 200);
 
     // === Speech bubble with congratulation ===
     const congratsMessages = [
@@ -79,25 +78,17 @@ export class TeacherPopup extends Container {
     const discoveredMsg = loc.get('level_complete.molecule_discovered', { molecule: formulaStr });
     const bubbleText = `${congrats}\n${discoveredMsg}`;
 
-    const bubble = createSpeechBubble(bubbleText, 260);
-    bubble.position.set(40, DESIGN_HEIGHT - 250);
+    const bubbleW = Math.min(260, leftColW - 20);
+    const bubble = createSpeechBubble(bubbleText, bubbleW);
+    bubble.position.set(Math.max(10, teacherX - 50), DESIGN_HEIGHT - 250);
     bubble.alpha = 0;
-    bubble.scale.set(0.5);
+    bubble.scale.set(0);
     this.addChild(bubble);
 
-    // Bubble pops in after teacher
+    // Bubble pops in after teacher using animate.js popIn
     setTimeout(() => {
       if (this.destroyed) return;
-      const bubStart = Date.now();
-      const popBubble = () => {
-        if (this.destroyed) return;
-        const t = Math.min((Date.now() - bubStart) / 400, 1);
-        const s = t < 1 ? 1 + Math.pow(2, -8 * t) * Math.sin((t - 0.1) * 4 * Math.PI) * 0.15 : 1;
-        bubble.scale.set(s);
-        bubble.alpha = Math.min(t * 2, 1);
-        if (t < 1) requestAnimationFrame(popBubble);
-      };
-      popBubble();
+      popIn(bubble, 400);
     }, 600);
 
     // === Stars (top center, big and celebratory) ===
@@ -128,26 +119,29 @@ export class TeacherPopup extends Container {
       }, 900);
     }
 
-    // === Molecule Story (center-right) + optional real image ===
+    // === Molecule Story (right column) + optional real image ===
     const assetLoader = AssetLoader.getInstance();
     const molTexture = assetLoader.getMoleculeTexture(molecule.id);
 
     if (molTexture) {
       // Show real image alongside narrower MoleculeStory
-      const story = new MoleculeStory(molecule.id, 155, 180);
-      story.position.set(W / 2 + 30, 85);
+      const storyW = Math.min(155, (rightColW - 10) / 2);
+      const imgW = Math.min(155, rightColW - storyW - 10);
+
+      const story = new MoleculeStory(molecule.id, storyW, 180);
+      story.position.set(rightColX, 85);
       this.addChild(story);
 
       // Real image container
       const imgContainer = new Container();
-      imgContainer.position.set(W / 2 + 195, 85);
+      imgContainer.position.set(rightColX + storyW + 10, 85);
       this.addChild(imgContainer);
 
       // Image background
       const imgBg = new Graphics();
-      imgBg.roundRect(0, 0, 155, 180, 10);
+      imgBg.roundRect(0, 0, imgW, 180, 10);
       imgBg.fill({ color: 0x0a0a1a, alpha: 0.8 });
-      imgBg.roundRect(0, 0, 155, 180, 10);
+      imgBg.roundRect(0, 0, imgW, 180, 10);
       imgBg.stroke({ color: COLORS.SECONDARY, alpha: 0.3, width: 1 });
       imgContainer.addChild(imgBg);
 
@@ -157,46 +151,82 @@ export class TeacherPopup extends Container {
         style: { fontFamily: FONT.FAMILY, fontSize: 11, fontWeight: 'bold', fill: COLORS.SECONDARY }
       });
       imgLabel.anchor.set(0.5, 0);
-      imgLabel.position.set(77, 6);
+      imgLabel.position.set(imgW / 2, 6);
       imgContainer.addChild(imgLabel);
 
       // The actual photo
       const photo = new Sprite(molTexture);
-      const maxDim = 130;
+      const maxDim = Math.min(130, imgW - 20);
       const scale = Math.min(maxDim / molTexture.width, maxDim / molTexture.height);
       photo.width = molTexture.width * scale;
       photo.height = molTexture.height * scale;
-      photo.position.set(77 - photo.width / 2, 25 + (145 - photo.height) / 2);
+      photo.position.set(imgW / 2 - photo.width / 2, 25 + (145 - photo.height) / 2);
       imgContainer.addChild(photo);
 
-      // Pop-in animation for image
+      // Household element image (if space permits and available)
+      if (rightColW >= 360 && molecule.ingredients && molecule.ingredients.length > 0) {
+        const primarySymbol = molecule.ingredients[0].element_id;
+        const householdTexture = assetLoader.getElementHouseholdTexture(primarySymbol);
+        if (householdTexture) {
+          const hhContainer = new Container();
+          const hhW = 80;
+          const hhH = 90;
+          hhContainer.position.set(rightColX + storyW + imgW + 14, 85);
+          this.addChild(hhContainer);
+
+          const hhBg = new Graphics();
+          hhBg.roundRect(0, 0, hhW, hhH, 8);
+          hhBg.fill({ color: 0x1a2a1a, alpha: 0.8 });
+          hhBg.roundRect(0, 0, hhW, hhH, 8);
+          hhBg.stroke({ color: COLORS.WARNING, alpha: 0.3, width: 1 });
+          hhContainer.addChild(hhBg);
+
+          const hhLabel = new Text({
+            text: loc.isCyrillic ? 'У кући' : 'U kući',
+            style: { fontFamily: FONT.FAMILY, fontSize: 9, fontWeight: 'bold', fill: COLORS.WARNING }
+          });
+          hhLabel.anchor.set(0.5, 0);
+          hhLabel.position.set(hhW / 2, 4);
+          hhContainer.addChild(hhLabel);
+
+          const hhPhoto = new Sprite(householdTexture);
+          const hhMaxDim = 55;
+          const hhScale = Math.min(hhMaxDim / householdTexture.width, hhMaxDim / householdTexture.height);
+          hhPhoto.width = householdTexture.width * hhScale;
+          hhPhoto.height = householdTexture.height * hhScale;
+          hhPhoto.position.set(hhW / 2 - hhPhoto.width / 2, 20 + (65 - hhPhoto.height) / 2);
+          hhContainer.addChild(hhPhoto);
+
+          // Pop-in animation for household image
+          hhContainer.alpha = 0;
+          hhContainer.scale.set(0);
+          setTimeout(() => {
+            if (this.destroyed) return;
+            popIn(hhContainer, 400);
+          }, 1000);
+        }
+      }
+
+      // Pop-in animation for image using animate.js
       imgContainer.alpha = 0;
-      imgContainer.scale.set(0.5);
+      imgContainer.scale.set(0);
       setTimeout(() => {
         if (this.destroyed) return;
-        const imgStart = Date.now();
-        const popImg = () => {
-          if (this.destroyed) return;
-          const t = Math.min((Date.now() - imgStart) / 400, 1);
-          const s = t < 1 ? 1 + Math.pow(2, -8 * t) * Math.sin((t - 0.1) * 4 * Math.PI) * 0.12 : 1;
-          imgContainer.scale.set(s);
-          imgContainer.alpha = Math.min(t * 2, 1);
-          if (t < 1) requestAnimationFrame(popImg);
-        };
-        popImg();
+        popIn(imgContainer, 400);
       }, 800);
     } else {
-      // Fallback: full-width MoleculeStory (unchanged)
-      const story = new MoleculeStory(molecule.id, 320, 180);
-      story.position.set(W / 2 + 30, 85);
+      // Fallback: full-width MoleculeStory
+      const storyW = Math.min(320, rightColW);
+      const story = new MoleculeStory(molecule.id, storyW, 180);
+      story.position.set(rightColX, 85);
       this.addChild(story);
     }
 
     // === Score panel (compact, below story) ===
     const scorePanel = new Graphics();
-    const spW = 320;
+    const spW = Math.min(320, rightColW);
     const spH = 120;
-    const spX = W / 2 + 30;
+    const spX = rightColX;
     const spY = 280;
     scorePanel.roundRect(0, 0, spW, spH, 12);
     scorePanel.fill({ color: COLORS.BG_PANEL, alpha: 0.9 });
@@ -226,33 +256,25 @@ export class TeacherPopup extends Container {
     rowY += rowH + 2;
     this._scoreRow(scorePanel, loc.get('level_complete.coins_earned'), `+${coinsEarned}`, COLORS.WARNING, rowY, spW);
 
-    // Score panel slide in from right
+    // Score panel slide in from right using tween
     scorePanel.x = W + 50;
     setTimeout(() => {
       if (this.destroyed) return;
-      const slideStart = Date.now();
-      const slidePanel = () => {
-        if (this.destroyed) return;
-        const t = Math.min((Date.now() - slideStart) / 500, 1);
-        const ease = 1 - Math.pow(1 - t, 3);
-        scorePanel.x = W + 50 - (W + 50 - spX) * ease;
-        if (t < 1) requestAnimationFrame(slidePanel);
-      };
-      slidePanel();
+      tween(scorePanel, { x: spX }, 500, { ease: easeOutBack });
     }, 400);
 
-    // === Fun fact (from teacher, below speech bubble) ===
+    // === Fun fact (right column, below bubble area) ===
+    const factW = Math.min(260, rightColW);
     const factBg = new Graphics();
-    const factW = 260;
     factBg.roundRect(0, 0, factW, 80, 10);
     factBg.fill({ color: 0x1a2a1a, alpha: 0.9 });
     factBg.roundRect(0, 0, factW, 80, 10);
     factBg.stroke({ color: COLORS.SECONDARY, alpha: 0.3, width: 1 });
-    factBg.position.set(320, DESIGN_HEIGHT - 180);
+    factBg.position.set(rightColX, DESIGN_HEIGHT - 180);
     this.addChild(factBg);
 
     const factIcon = new Text({
-      text: loc.isCyrillic ? '💡' : '💡',
+      text: '\uD83D\uDCA1',
       style: { fontSize: 14 }
     });
     factIcon.position.set(8, 6);
@@ -272,27 +294,20 @@ export class TeacherPopup extends Container {
     factText.position.set(10, 28);
     factBg.addChild(factText);
 
-    // Fade fact in
+    // Fade fact in using tween
     factBg.alpha = 0;
     setTimeout(() => {
       if (this.destroyed) return;
-      const factStart = Date.now();
-      const fadeFact = () => {
-        if (this.destroyed) return;
-        const t = Math.min((Date.now() - factStart) / 400, 1);
-        factBg.alpha = t;
-        if (t < 1) requestAnimationFrame(fadeFact);
-      };
-      fadeFact();
+      tween(factBg, { alpha: 1 }, 400, { ease: easeLinear });
     }, 1200);
 
-    // === Navigation buttons (bottom-right) ===
+    // === Navigation buttons (right column, bottom) ===
     const chapter = gameData.getChapter(chapterId);
     const nextLevel = chapter.levels.find(l => l.level_number === levelNumber + 1);
     const hasNext = nextLevel && progress.isLevelUnlocked(chapterId, levelNumber + 1);
 
-    const btnW = 220;
-    let btnX = W - btnW - 40;
+    const btnW = Math.min(220, rightColW - 10);
+    let btnX = rightColX;
     let btnY = DESIGN_HEIGHT - 170;
 
     if (hasNext) {
@@ -307,19 +322,12 @@ export class TeacherPopup extends Container {
       nextBtn.position.set(btnX, btnY);
       this.addChild(nextBtn);
 
-      // Pop in
+      // Pop in using animate.js
       nextBtn.scale.set(0);
+      nextBtn.alpha = 0;
       setTimeout(() => {
         if (this.destroyed) return;
-        const s = Date.now();
-        const pop = () => {
-          if (this.destroyed) return;
-          const t = Math.min((Date.now() - s) / 400, 1);
-          const v = t < 1 ? 1 + Math.pow(2, -8 * t) * Math.sin((t - 0.1) * 4 * Math.PI) * 0.12 : 1;
-          nextBtn.scale.set(v);
-          if (t < 1) requestAnimationFrame(pop);
-        };
-        pop();
+        popIn(nextBtn, 400);
       }, 1000);
 
       btnY += 62;
@@ -327,7 +335,7 @@ export class TeacherPopup extends Container {
       const nextChapter = gameData.getChapter(chapterId + 1);
       if (nextChapter && progress.isChapterUnlocked(chapterId + 1)) {
         const ncBtn = new Button({
-          label: `${loc.t(nextChapter.title_sr)} →`,
+          label: `${loc.t(nextChapter.title_sr)} \u2192`,
           width: btnW,
           height: 52,
           color: COLORS.BUTTON_GREEN,

@@ -10,6 +10,7 @@ import { Button } from '../ui/Button.js';
 import { Panel } from '../ui/Panel.js';
 import { createAtomVisual } from '../graphics/AtomGraphics.js';
 import { drawLabBackground } from '../graphics/BackgroundGraphics.js';
+import { tween, popIn, easeOutBack, easeLinear } from '../utils/animate.js';
 import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class LaboratoryScene extends Scene {
@@ -273,12 +274,22 @@ export class LaboratoryScene extends Scene {
     this._detailOverlay.on('pointerup', () => this._closeDetail());
     this.addChild(this._detailOverlay);
 
+    // Overlay fade-in
+    this._detailOverlay.alpha = 0;
+    tween(this._detailOverlay, { alpha: 0.7 }, 200, { ease: easeLinear });
+
     // Detail panel
     const pw = Math.min(500, W - 60);
     const ph = 450;
     this._detailPanel = new Panel({ width: pw, height: ph, color: 0x16213e });
     this._detailPanel.position.set((W - pw) / 2, (DESIGN_HEIGHT - ph) / 2);
     this.addChild(this._detailPanel);
+
+    // Panel entrance animation: scale from 0.8 with easeOutBack
+    this._detailPanel.scale.set(0.8);
+    this._detailPanel.alpha = 0;
+    tween(this._detailPanel, { alpha: 1 }, 250, { ease: easeLinear });
+    tween(this._detailPanel, { 'scale.x': 1, 'scale.y': 1 }, 350, { ease: easeOutBack });
 
     const p = this._detailPanel;
     const name = script === 'cyrillic' ? element.name_sr_cyr : element.name_sr_lat;
@@ -289,35 +300,97 @@ export class LaboratoryScene extends Scene {
     atom.position.set(70, 70);
     p.addChild(atom);
 
-    // Real element photo (if available)
+    // Element photos row: lab photo + household photo side by side
     const assetLoader = AssetLoader.getInstance();
     const elemTexture = assetLoader.getElementTexture(element.symbol);
-    if (elemTexture) {
+    const householdTexture = assetLoader.getElementHouseholdTexture(element.symbol);
+    const hasLabPhoto = !!elemTexture;
+    const hasHouseholdPhoto = !!householdTexture;
+
+    // Position photos in top-right area, adjusted for narrow panels
+    const photoSize = 80;
+    const photoGap = 10;
+    const photoTopY = 30;
+
+    if (hasLabPhoto && hasHouseholdPhoto) {
+      // Two photos side by side
+      const twoPhotoW = photoSize * 2 + photoGap;
+      const photoStartX = Math.max(130, pw - twoPhotoW - 20);
+
+      // Lab photo
+      const labContainer = new Container();
+      labContainer.position.set(photoStartX, photoTopY);
+      p.addChild(labContainer);
+
+      const labPhoto = new Sprite(elemTexture);
+      labPhoto.width = photoSize;
+      labPhoto.height = photoSize;
+      labContainer.addChild(labPhoto);
+
+      const labLabel = new Text({
+        text: loc.isCyrillic ? 'Елемент' : 'Element',
+        style: { fontFamily: FONT.FAMILY, fontSize: 9, fill: COLORS.TEXT_DIM }
+      });
+      labLabel.anchor.set(0.5, 0);
+      labLabel.position.set(photoSize / 2, photoSize + 2);
+      labContainer.addChild(labLabel);
+
+      // Household photo
+      const hhContainer = new Container();
+      hhContainer.position.set(photoStartX + photoSize + photoGap, photoTopY);
+      p.addChild(hhContainer);
+
+      const hhPhoto = new Sprite(householdTexture);
+      hhPhoto.width = photoSize;
+      hhPhoto.height = photoSize;
+      hhContainer.addChild(hhPhoto);
+
+      const hhLabel = new Text({
+        text: loc.isCyrillic ? 'У кући' : 'U kući',
+        style: { fontFamily: FONT.FAMILY, fontSize: 9, fill: COLORS.WARNING }
+      });
+      hhLabel.anchor.set(0.5, 0);
+      hhLabel.position.set(photoSize / 2, photoSize + 2);
+      hhContainer.addChild(hhLabel);
+
+      // Pop-in animations for photos
+      labContainer.alpha = 0;
+      labContainer.scale.set(0);
+      setTimeout(() => {
+        if (p.destroyed) return;
+        popIn(labContainer, 350);
+      }, 200);
+
+      hhContainer.alpha = 0;
+      hhContainer.scale.set(0);
+      setTimeout(() => {
+        if (p.destroyed) return;
+        popIn(hhContainer, 350);
+      }, 350);
+    } else if (hasLabPhoto) {
+      // Single lab photo, positioned with margin from close button
       const photo = new Sprite(elemTexture);
-      photo.width = 80;
-      photo.height = 80;
-      photo.position.set(pw - 110, 30);
+      photo.width = photoSize;
+      photo.height = photoSize;
+      photo.position.set(pw - photoSize - 20, photoTopY);
       photo.alpha = 0;
       photo.scale.set(0);
       p.addChild(photo);
 
-      // Pop-in animation
-      const photoStart = Date.now();
-      const popPhoto = () => {
-        if (p.destroyed || photo.destroyed) return;
-        const t = Math.min((Date.now() - photoStart) / 350, 1);
-        const s = t < 1 ? 1 + Math.pow(2, -8 * t) * Math.sin((t - 0.1) * 4 * Math.PI) * 0.1 : 1;
-        photo.scale.set(s * 80 / elemTexture.width, s * 80 / elemTexture.height);
-        photo.alpha = Math.min(t * 2, 1);
-        if (t < 1) requestAnimationFrame(popPhoto);
-      };
-      setTimeout(popPhoto, 200);
+      setTimeout(() => {
+        if (p.destroyed) return;
+        popIn(photo, 350);
+      }, 300);
     }
 
-    // Name + Symbol
+    // Name + Symbol (cap max width to avoid overlapping photos)
+    const textMaxX = hasLabPhoto && hasHouseholdPhoto
+      ? Math.max(130, pw - (photoSize * 2 + photoGap) - 30)
+      : hasLabPhoto ? pw - photoSize - 30 : pw - 30;
+
     const nameText = new Text({
       text: name,
-      style: { fontFamily: FONT.FAMILY, fontSize: FONT.HEADING_SIZE, fontWeight: 'bold', fill: COLORS.TEXT_WHITE }
+      style: { fontFamily: FONT.FAMILY, fontSize: FONT.HEADING_SIZE, fontWeight: 'bold', fill: COLORS.TEXT_WHITE, wordWrap: true, wordWrapWidth: textMaxX - 130 }
     });
     nameText.position.set(130, 35);
     p.addChild(nameText);
@@ -374,7 +447,7 @@ export class LaboratoryScene extends Scene {
     factText.position.set(30, y);
     p.addChild(factText);
 
-    // Close button
+    // Close button at bottom-center of panel
     const closeBtn = new Button({
       label: loc.get('common.close'),
       width: 140,
@@ -383,20 +456,36 @@ export class LaboratoryScene extends Scene {
       fontSize: FONT.SMALL_SIZE,
       onClick: () => this._closeDetail()
     });
-    closeBtn.position.set(pw - 160, 15);
+    closeBtn.position.set((pw - 140) / 2, ph - 55);
     p.addChild(closeBtn);
   }
 
   _closeDetail() {
-    if (this._detailOverlay) {
-      this.removeChild(this._detailOverlay);
-      this._detailOverlay.destroy();
-      this._detailOverlay = null;
-    }
-    if (this._detailPanel) {
-      this.removeChild(this._detailPanel);
-      this._detailPanel.destroy({ children: true });
-      this._detailPanel = null;
+    if (this._closing) return;
+    this._closing = true;
+
+    const cleanup = () => {
+      if (this._detailOverlay) {
+        this.removeChild(this._detailOverlay);
+        this._detailOverlay.destroy();
+        this._detailOverlay = null;
+      }
+      if (this._detailPanel) {
+        this.removeChild(this._detailPanel);
+        this._detailPanel.destroy({ children: true });
+        this._detailPanel = null;
+      }
+      this._closing = false;
+    };
+
+    // Animate out: scale down + fade
+    if (this._detailPanel && !this._detailPanel.destroyed) {
+      tween(this._detailPanel, { alpha: 0, 'scale.x': 0.9, 'scale.y': 0.9 }, 200, { ease: easeLinear, onComplete: cleanup });
+      if (this._detailOverlay && !this._detailOverlay.destroyed) {
+        tween(this._detailOverlay, { alpha: 0 }, 200, { ease: easeLinear });
+      }
+    } else {
+      cleanup();
     }
   }
 }

@@ -18,6 +18,21 @@ const ELEMENT_IMAGES = {
   Fe: 'images/elements/iron.jpg'
 };
 
+const ELEMENT_HOUSEHOLD_IMAGES = {
+  H:  'images/elements_household/hydrogen.svg',
+  O:  'images/elements_household/oxygen.svg',
+  C:  'images/elements_household/carbon.svg',
+  N:  'images/elements_household/nitrogen.svg',
+  Na: 'images/elements_household/sodium.svg',
+  Cl: 'images/elements_household/chlorine.svg',
+  K:  'images/elements_household/potassium.svg',
+  Ca: 'images/elements_household/calcium.svg',
+  S:  'images/elements_household/sulfur.svg',
+  P:  'images/elements_household/phosphorus.svg',
+  Mg: 'images/elements_household/magnesium.svg',
+  Fe: 'images/elements_household/iron.svg'
+};
+
 const MOLECULE_IMAGES = {
   h2:    'images/molecules/hydrogen_gas.jpg',
   o2:    'images/molecules/oxygen_gas.jpg',
@@ -40,6 +55,10 @@ export function getElementImagePath(symbol) {
   return ELEMENT_IMAGES[symbol] || null;
 }
 
+export function getElementHouseholdImagePath(symbol) {
+  return ELEMENT_HOUSEHOLD_IMAGES[symbol] || null;
+}
+
 export function getMoleculeImagePath(moleculeId) {
   return MOLECULE_IMAGES[moleculeId] || null;
 }
@@ -47,6 +66,7 @@ export function getMoleculeImagePath(moleculeId) {
 export function getAllImagePaths() {
   return [
     ...Object.values(ELEMENT_IMAGES),
+    ...Object.values(ELEMENT_HOUSEHOLD_IMAGES),
     ...Object.values(MOLECULE_IMAGES)
   ];
 }
