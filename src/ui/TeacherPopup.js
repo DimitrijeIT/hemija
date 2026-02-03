@@ -1,4 +1,4 @@
-import { Container, Graphics, Text } from 'pixi.js';
+import { Container, Graphics, Text, Sprite } from 'pixi.js';
 import { createTeacher, createSpeechBubble } from '../graphics/TeacherGraphics.js';
 import { MoleculeStory } from '../gameplay/MoleculeStory.js';
 import { ConfettiEffect } from '../gameplay/ConfettiEffect.js';
@@ -10,6 +10,7 @@ import { SceneManager } from '../core/SceneManager.js';
 import { GameData } from '../data/GameData.js';
 import { ProgressData } from '../data/ProgressData.js';
 import { AudioManager } from '../core/AudioManager.js';
+import { AssetLoader } from '../core/AssetLoader.js';
 import { formatFormula } from '../utils/formulaFormat.js';
 import { Game } from '../core/Game.js';
 import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
@@ -127,10 +128,69 @@ export class TeacherPopup extends Container {
       }, 900);
     }
 
-    // === Molecule Story (center-right) ===
-    const story = new MoleculeStory(molecule.id, 320, 180);
-    story.position.set(W / 2 + 30, 85);
-    this.addChild(story);
+    // === Molecule Story (center-right) + optional real image ===
+    const assetLoader = AssetLoader.getInstance();
+    const molTexture = assetLoader.getMoleculeTexture(molecule.id);
+
+    if (molTexture) {
+      // Show real image alongside narrower MoleculeStory
+      const story = new MoleculeStory(molecule.id, 155, 180);
+      story.position.set(W / 2 + 30, 85);
+      this.addChild(story);
+
+      // Real image container
+      const imgContainer = new Container();
+      imgContainer.position.set(W / 2 + 195, 85);
+      this.addChild(imgContainer);
+
+      // Image background
+      const imgBg = new Graphics();
+      imgBg.roundRect(0, 0, 155, 180, 10);
+      imgBg.fill({ color: 0x0a0a1a, alpha: 0.8 });
+      imgBg.roundRect(0, 0, 155, 180, 10);
+      imgBg.stroke({ color: COLORS.SECONDARY, alpha: 0.3, width: 1 });
+      imgContainer.addChild(imgBg);
+
+      // "U stvarnosti" label
+      const imgLabel = new Text({
+        text: loc.isCyrillic ? 'У стварности' : 'U stvarnosti',
+        style: { fontFamily: FONT.FAMILY, fontSize: 11, fontWeight: 'bold', fill: COLORS.SECONDARY }
+      });
+      imgLabel.anchor.set(0.5, 0);
+      imgLabel.position.set(77, 6);
+      imgContainer.addChild(imgLabel);
+
+      // The actual photo
+      const photo = new Sprite(molTexture);
+      const maxDim = 130;
+      const scale = Math.min(maxDim / molTexture.width, maxDim / molTexture.height);
+      photo.width = molTexture.width * scale;
+      photo.height = molTexture.height * scale;
+      photo.position.set(77 - photo.width / 2, 25 + (145 - photo.height) / 2);
+      imgContainer.addChild(photo);
+
+      // Pop-in animation for image
+      imgContainer.alpha = 0;
+      imgContainer.scale.set(0.5);
+      setTimeout(() => {
+        if (this.destroyed) return;
+        const imgStart = Date.now();
+        const popImg = () => {
+          if (this.destroyed) return;
+          const t = Math.min((Date.now() - imgStart) / 400, 1);
+          const s = t < 1 ? 1 + Math.pow(2, -8 * t) * Math.sin((t - 0.1) * 4 * Math.PI) * 0.12 : 1;
+          imgContainer.scale.set(s);
+          imgContainer.alpha = Math.min(t * 2, 1);
+          if (t < 1) requestAnimationFrame(popImg);
+        };
+        popImg();
+      }, 800);
+    } else {
+      // Fallback: full-width MoleculeStory (unchanged)
+      const story = new MoleculeStory(molecule.id, 320, 180);
+      story.position.set(W / 2 + 30, 85);
+      this.addChild(story);
+    }
 
     // === Score panel (compact, below story) ===
     const scorePanel = new Graphics();

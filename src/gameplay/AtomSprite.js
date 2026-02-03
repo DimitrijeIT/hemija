@@ -7,7 +7,7 @@ export class AtomSprite extends Container {
     this.element = element;
     this.radius = radius;
 
-    const visual = createAtomVisual(element.symbol, element.color, radius);
+    const visual = createAtomVisual(element.symbol, element.color, radius, true, element);
     this.addChild(visual);
 
     this.eventMode = 'static';

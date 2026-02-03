@@ -1,10 +1,11 @@
-import { Text, Graphics, Container } from 'pixi.js';
+import { Text, Graphics, Container, Sprite } from 'pixi.js';
 import { Scene } from '../core/Scene.js';
 import { SceneManager } from '../core/SceneManager.js';
 import { Localization } from '../core/Localization.js';
 import { GameData } from '../data/GameData.js';
 import { ProgressData } from '../data/ProgressData.js';
 import { SaveManager } from '../core/SaveManager.js';
+import { AssetLoader } from '../core/AssetLoader.js';
 import { Button } from '../ui/Button.js';
 import { Panel } from '../ui/Panel.js';
 import { createAtomVisual } from '../graphics/AtomGraphics.js';
@@ -283,10 +284,35 @@ export class LaboratoryScene extends Scene {
     const name = script === 'cyrillic' ? element.name_sr_cyr : element.name_sr_lat;
     const color = parseInt(element.color.replace('#', ''), 16);
 
-    // Big atom visual
-    const atom = createAtomVisual(element.symbol, color, 40);
+    // Big atom visual with real electron shells
+    const atom = createAtomVisual(element.symbol, color, 40, true, element);
     atom.position.set(70, 70);
     p.addChild(atom);
+
+    // Real element photo (if available)
+    const assetLoader = AssetLoader.getInstance();
+    const elemTexture = assetLoader.getElementTexture(element.symbol);
+    if (elemTexture) {
+      const photo = new Sprite(elemTexture);
+      photo.width = 80;
+      photo.height = 80;
+      photo.position.set(pw - 110, 30);
+      photo.alpha = 0;
+      photo.scale.set(0);
+      p.addChild(photo);
+
+      // Pop-in animation
+      const photoStart = Date.now();
+      const popPhoto = () => {
+        if (p.destroyed || photo.destroyed) return;
+        const t = Math.min((Date.now() - photoStart) / 350, 1);
+        const s = t < 1 ? 1 + Math.pow(2, -8 * t) * Math.sin((t - 0.1) * 4 * Math.PI) * 0.1 : 1;
+        photo.scale.set(s * 80 / elemTexture.width, s * 80 / elemTexture.height);
+        photo.alpha = Math.min(t * 2, 1);
+        if (t < 1) requestAnimationFrame(popPhoto);
+      };
+      setTimeout(popPhoto, 200);
+    }
 
     // Name + Symbol
     const nameText = new Text({

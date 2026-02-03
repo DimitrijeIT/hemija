@@ -17,6 +17,7 @@ import { Button } from '../ui/Button.js';
 import { Toast } from '../ui/Toast.js';
 import { drawGameplayBackground } from '../graphics/BackgroundGraphics.js';
 import { formatFormula } from '../utils/formulaFormat.js';
+import { getTotalElectrons } from '../utils/electronShells.js';
 import { COLORS, FONT, SCENES, DESIGN_HEIGHT } from '../core/Constants.js';
 
 export class GameplayScene extends Scene {
@@ -254,12 +255,18 @@ export class GameplayScene extends Scene {
 
     this._workspace.showResult(this._molecule, this._workspace.getFilledElements());
 
-    // Gold particles burst from workspace area
+    // Gold particles burst - count scales with molecule's total electrons
+    let totalElectrons = 0;
+    for (const ing of this._molecule.ingredients) {
+      totalElectrons += getTotalElectrons(ing.element_id) * ing.count;
+    }
+    const particleCount = Math.min(50, 15 + Math.floor(totalElectrons / 2));
+
     const particles = new ParticleEffect({
       x: W / 2 + 200,
       y: 250,
       color: COLORS.GOLD,
-      count: 30,
+      count: particleCount,
       spread: 120,
       duration: 1000
     });

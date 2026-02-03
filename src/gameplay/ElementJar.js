@@ -13,12 +13,15 @@ export class ElementJar extends Container {
     this.eventMode = 'static';
     this.cursor = 'pointer';
 
-    // Idle wobble
+    // Idle wobble - lighter elements wobble faster
+    const mass = element.atomic_mass || 10;
+    const wobbleSpeed = 2.0 - (Math.min(mass, 56) / 56) * 1.4;  // H(1.008)~2.0, Fe(55.845)~0.6
+    const wobbleAmp = 0.05 - (Math.min(mass, 56) / 56) * 0.03;  // H~0.05, Fe~0.02
     const startTime = Date.now() + Math.random() * 5000;
     const wobble = () => {
       if (this.destroyed) return;
       const t = (Date.now() - startTime) / 1000;
-      this.rotation = Math.sin(t * 1.2) * 0.03;
+      this.rotation = Math.sin(t * wobbleSpeed) * wobbleAmp;
       requestAnimationFrame(wobble);
     };
     wobble();
